@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "MyFullSchematicsSchema",
+  "title": "Application Schema",
+  "type": "object",
+  "properties": {
+    "index": {
+      "type": "number",
+      "default": 1
+    },
+    "name": {
+      "type": "string"
+    },
+    "style": {
+      "type": "string"
+    },
+    "framework":{
+      "type": "string"
+    },
+    "routing": {
+      "type": "boolean"
+    },
+    "redux": {
+      "type": "boolean"
+    },
+    "i18n":{
+      "type": "boolean"
+    }    
+  },
+  "required": ["name"]
+}

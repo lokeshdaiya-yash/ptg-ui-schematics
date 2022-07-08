@@ -1,0 +1,34 @@
+{
+  "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "extends": ["@schematics/angular"],
+  "schematics": {
+    "my-schematic": {
+      "description": "An example schematic",
+      "factory": "./my-schematic/index#mySchematic"
+    },
+    "my-other-schematic": {
+      "description": "A schematic that uses another schematics.",
+      "factory": "./my-other-schematic"
+    },
+    "my-full-schematic": {
+      "description": "A schematic using a source and a schema to validate options.",
+      "factory": "./my-full-schematic",
+      "schema": "./my-full-schematic/schema.json"
+    },
+    "my-extend-schematic": {
+      "description": "A schematic that extends another schematic.",
+      "extends": "my-full-schematic"
+    },
+    "application": {
+      "description": "A blank schematic.",
+      "factory": "./application/index#application",
+      "schema": "./application/schema.json"
+    },
+
+    "ng-add": {
+      "description": "A blank schematic.",
+      "factory": "./ng-add/index#ngAdd",
+      "schema": "./ng-add/schema.json"
+    }
+  }
+}

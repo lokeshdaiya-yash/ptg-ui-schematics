@@ -1,0 +1,8 @@
+<h1 class="title">Angular Demo</h1>
+
+<div class="message" [ngClass]="{'text-purple':color==='Purple','text-red':color==='Red'}">
+  Sky is {{ color }}</div>
+
+<button class="btn btn-purple" (click)="changeColor('Purple')">Purple</button>
+
+<button class="btn btn-red" (click)="changeColor('Red')">Red</button>

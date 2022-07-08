@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "PTGAngularApplication",
+  "title": "PTG Application Options Schema",
+  "type": "object",
+  "properties": {
+    "framework": {
+      "description": "The css framework to be used for application",
+      "type": "string",
+      "default": "none",
+      "x-prompt": {
+        "message": "Which framework would you like to use?",
+        "type": "list",
+        "items": [
+          {
+            "value": "none",
+            "label": "None"
+          },
+          {
+            "value": "material",
+            "label": "Material"
+          },
+          {
+            "value": "bootstrap",
+            "label": "Bootstrap"
+          }
+        ]
+      }
+    },
+
+    "ngrx": {
+      "type": "boolean",
+      "description": "Adds ngrx in project",
+      "default": false,
+      "x-prompt": "Would you like to configure ngrx for this application?"
+    }
+  },
+  "required": []
+}

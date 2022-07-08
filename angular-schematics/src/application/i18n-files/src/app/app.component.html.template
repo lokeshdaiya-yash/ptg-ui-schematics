@@ -1,0 +1,7 @@
+<h1 class="title" translate>Title</h1>
+
+<div class="message" translate>WelcomeMessage</div>
+
+<button class="btn" (click)="switchLanguage('en')">English</button>
+
+<button class="btn" (click)="switchLanguage('de')">German</button>

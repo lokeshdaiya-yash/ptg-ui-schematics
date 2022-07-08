@@ -1,0 +1,56 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+
+import React, { Component, useState } from "react";
+import ReactDOM from "react-dom";
+import app from './app.module.css';
+import Header from './components/UI/header'
+import Router from './router/router'
+import ToDoList from './components/toDoList';
+import { useTranslation, Trans } from "react-i18next";
+import i18next, { default as i18n } from 'i18next';
+import "./translations/i18n";
+import { Example } from "./Example";
+
+
+ 
+
+
+
+
+ 
+export default function App() {
+  const { t, i18n } = useTranslation();
+
+
+
+  const changeLanguage = (language: string ) => {
+
+    i18n.changeLanguage(language);
+
+  };
+
+ 
+  
+  return (
+    <div className="app">
+      
+      <div className="App-header">
+   <header className="flex">
+         React Routing
+       </header>
+       <Header/>
+       <Router />
+       <ToDoList />
+       <Example></Example>
+       <button onClick={() => changeLanguage("zh")}>zh</button>
+
+        <button onClick={() => changeLanguage("en")}>en</button>
+     
+    </div>
+    </div>
+
+  );
+}
+ 
+
+
