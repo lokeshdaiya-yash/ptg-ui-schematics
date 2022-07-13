@@ -4,7 +4,7 @@ import inquirer = require('inquirer');
 export function reactAppGenerator() {
   getArgs().then((a) => {
     execSync(
-      `create-nx-workspace ${a.workspace}  --preset empty --nx-cloud=false`,
+      `npx create-nx-workspace ${a.workspace}  --preset empty --nx-cloud=false`,
       {
         cwd: process.cwd(),
         stdio: [0, 1, 2],
