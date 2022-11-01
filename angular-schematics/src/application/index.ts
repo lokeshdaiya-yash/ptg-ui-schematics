@@ -115,19 +115,17 @@ export function setNGRX(_options: any): Rule {
       module: "src/app/app.module.ts",
       facade: true,
       root: true,
-      syntax: "classes",
     }),
     externalSchematic("@nrwl/angular", "ngrx", {
       name: "app",
       module: "src/app/core/core.module.ts",
       facade: true,
       root: false,
-      syntax: "classes",
     }),
     addDepsToPackageJson(
       {
-        "@nrwl/angular": "12.9.0",
-        "@nrwl/workspace": "12.9.0",
+        "@nrwl/angular": "~14.7.0",
+        "@nrwl/workspace": "~14.7.0",
       },
       {}
     ),
@@ -137,8 +135,8 @@ export function setNGRX(_options: any): Rule {
 export function addMaterialToPackageJson(): Rule {
   return addDepsToPackageJson(
     {
-      "@angular/material": "^12.2.9",
-      "@angular/cdk": "^12.2.9",
+      "@angular/material": "~14.2.0",
+      "@angular/cdk": "~14.2.0",
     },
     {},
     false

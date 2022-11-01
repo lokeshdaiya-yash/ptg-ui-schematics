@@ -1,7 +1,9 @@
-import { execSync } from 'child_process';
+import { exec, execSync } from 'child_process';
 import { writeFileSync } from 'fs';
 import * as path from 'path';
 import { dirSync } from 'tmp';
+import inquirer = require('inquirer');
+
 
 function createSandbox() {
   console.log(`Creating a sandbox...`);
@@ -12,16 +14,16 @@ function createSandbox() {
     path.join(tmpDir, 'package.json'),
     JSON.stringify({
       dependencies: {
-        '@angular/cli': '~12.2.9',
-        '@nrwl/angular': '^12.9.0',
-        '@nrwl/workspace': '^12.0.0',
-        typescript: '^4.4.3',
+        '@angular/cli': '~14.2.3',
+        '@nrwl/angular': '~14.7.0',
+        '@nrwl/workspace': '~14.7.0',
+        'typescript': '~4.7.0',
       },
       license: 'MIT',
     })
   );
 
-  execSync(`npm install --silent`, {
+  execSync(`npm install`, {
     cwd: tmpDir,
     stdio: [0, 1, 2],
   });
@@ -43,11 +45,14 @@ function createApp(tmpDir: string) {
   const command = `${tmpDir}/node_modules/.bin/ng new --collection=${collection} --strict false`;
   console.log(command);
   console.log('current directory', process.cwd());
-
-  execSync(`${command}`, {
-    stdio: [0, 1, 2],
-    cwd: process.cwd(),
-  });
+  try {
+    execSync(`${command}`, {
+      // stdio: [0, 1, 2],
+      cwd: process.cwd(),
+    });
+  } catch(err) {
+    console.log({err});
+  }
   console.log('createApp Function Completed');
 }
 
