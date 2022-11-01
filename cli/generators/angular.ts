@@ -28,7 +28,7 @@ function createSandbox() {
     stdio: [0, 1, 2],
   });
 
-  execSync(`npm link @ptg-ui/angular-schematics --silent`, {
+  execSync(`npm install @ptg-ui/angular-schematics --silent`, {
     cwd: tmpDir,
     stdio: [0, 1, 2],
   });
