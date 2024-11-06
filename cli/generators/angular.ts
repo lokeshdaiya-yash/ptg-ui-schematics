@@ -18,9 +18,6 @@ async function createSandbox() {
           '@nrwl/workspace': '~14.7.0',
           'typescript': '^4.7.0',
         },
-        devDependencies: {
-          "@types/node": "^12.11.1"
-        },
         license: 'MIT',
       })
     );
