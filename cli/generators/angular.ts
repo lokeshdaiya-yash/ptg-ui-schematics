@@ -2,6 +2,8 @@ import { execSync } from 'child_process';
 import { writeFileSync,existsSync,readdirSync,lstatSync,unlinkSync,rmdirSync } from 'fs';
 import * as path from 'path';
 import { dirSync } from 'tmp';
+import * as inquirer from "inquirer";
+
 
 
 async function createSandbox() {
@@ -39,7 +41,7 @@ async function createSandbox() {
   }
 
   try{
-    execSync(`npm link @ptg-ui/angular-schematics`, {
+    execSync(`npm install @ptg-ui/angular-schematics`, {
       cwd: tmpDir,
       stdio: [0, 1, 2],
     });
@@ -50,10 +52,25 @@ async function createSandbox() {
   return tmpDir;
 }
 
-function createApp(tmpDir: string) {
+//open when require to take name by inquirer
+// async function takeAppName(){
+//   return inquirer
+//   .prompt([
+//     {
+//       name: "ApplicationName",
+//       message: `Enter Application Name`,
+//       type: "input",
+//     },
+//   ])
+//   .then((a) => {
+//     return a.ApplicationName;
+//   });
+// }
+async function createApp(tmpDir: string) {
   console.log('Inside createApp Angular');
   const collection = `${tmpDir}/node_modules/@ptg-ui/angular-schematics/src/collection.json`;
-
+  // const projectAppName= await takeAppName();
+  // console.log('projectAppName', projectAppName);
   const command = `${tmpDir}/node_modules/.bin/ng new --collection=${collection} --strict false`;
   console.log('current directory', process.cwd());
   try {
