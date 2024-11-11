@@ -19,9 +19,7 @@ import { join, normalize } from 'path';
 // Instead of `any`, it would make sense here to get a schema-to-dts package and output the
 // interfaces so you get type-safe options.
 export default function (options: any): Rule {
-  console.log('react options', options);
   return async (host: Tree, _context: SchematicContext) => {
-    // console.log(tree);
     const workspace = await getWorkspace(host);
     const newProjectRoot =
       (workspace.extensions.newProjectRoot as string | undefined) || '';
@@ -78,7 +76,21 @@ export default function (options: any): Rule {
         ]),
         MergeStrategy.Overwrite
       ),
-      originalOptionsObject.routing
+      originalOptionsObject.routing && originalOptionsObject.redux && originalOptionsObject.i18n
+        ? mergeWith(
+            apply(url('./files-route+redux+i18n'), [
+              applyTemplates({
+                utils: strings,
+                ...originalOptionsObject,
+                appName: originalOptionsObject.name,
+                isRootApp,
+              }),
+              move(`apps/${options.name}`),
+            ]),
+            MergeStrategy.Overwrite
+          )
+        : noop,
+        originalOptionsObject.routing && !originalOptionsObject.redux && !originalOptionsObject.i18n
         ? mergeWith(
             apply(url('./files-route'), [
               applyTemplates({
@@ -92,7 +104,7 @@ export default function (options: any): Rule {
             MergeStrategy.Overwrite
           )
         : noop,
-      originalOptionsObject.redux
+        !originalOptionsObject.routing && originalOptionsObject.redux && !originalOptionsObject.i18n
         ? mergeWith(
             apply(url('./files-redux'), [
               applyTemplates({
@@ -106,7 +118,21 @@ export default function (options: any): Rule {
             MergeStrategy.Overwrite
           )
         : noop,
-      originalOptionsObject.routing && originalOptionsObject.redux
+        !originalOptionsObject.routing && !originalOptionsObject.redux && originalOptionsObject.i18n
+        ? mergeWith(
+            apply(url('./files-i18n'), [
+              applyTemplates({
+                utils: strings,
+                ...originalOptionsObject,
+                appName: originalOptionsObject.name,
+                isRootApp,
+              }),
+              move(`apps/${options.name}`),
+            ]),
+            MergeStrategy.Overwrite
+          )
+        : noop,
+        originalOptionsObject.routing && originalOptionsObject.redux && !originalOptionsObject.i18n
         ? mergeWith(
             apply(url('./files-route+redux'), [
               applyTemplates({
@@ -120,9 +146,37 @@ export default function (options: any): Rule {
             MergeStrategy.Overwrite
           )
         : noop,
-      originalOptionsObject.i18n
+        originalOptionsObject.routing && !originalOptionsObject.redux && originalOptionsObject.i18n
         ? mergeWith(
-            apply(url('./files-i18n'), [
+            apply(url('./files-route+i18n'), [
+              applyTemplates({
+                utils: strings,
+                ...originalOptionsObject,
+                appName: originalOptionsObject.name,
+                isRootApp,
+              }),
+              move(`apps/${options.name}`),
+            ]),
+            MergeStrategy.Overwrite
+          )
+        : noop,
+        !originalOptionsObject.routing && originalOptionsObject.redux && originalOptionsObject.i18n
+        ? mergeWith(
+            apply(url('./files-redux+i18n'), [
+              applyTemplates({
+                utils: strings,
+                ...originalOptionsObject,
+                appName: originalOptionsObject.name,
+                isRootApp,
+              }),
+              move(`apps/${options.name}`),
+            ]),
+            MergeStrategy.Overwrite
+          )
+        : noop,
+        !originalOptionsObject.routing && !originalOptionsObject.redux && !originalOptionsObject.i18n
+        ? mergeWith(
+            apply(url('./files-route'), [
               applyTemplates({
                 utils: strings,
                 ...originalOptionsObject,
@@ -139,19 +193,16 @@ export default function (options: any): Rule {
 }
 export function setFramework(options: any) {
   if (options.framework === 'material') {
-    console.log('material selected latest');
     return chain([addMaterialToPackageJson()]);
   }
 
   if (options.framework === 'bootstrap') {
-    console.log('bootstrap selected');
     return chain([addBootstrapToPackageJson(), updateStyles(options)]);
   }
   return noop;
 }
 
 export function setReduxTpPackageJson(options: any): Rule {
-  console.log('Inside setReduxTpPackageJson');
   if (!options.redux) {
     return noop;
   }
@@ -168,7 +219,6 @@ export function setReduxTpPackageJson(options: any): Rule {
 }
 
 export function setI18nToPackageJson(options: any): Rule {
-  console.log('Inside setI18nToPackageJson');
   if (!options.i18n) {
     return noop;
   }
@@ -208,47 +258,7 @@ export function addBootstrapToPackageJson(): Rule {
     false
   );
 }
-// export function addI18n(): Rule {
-//   return chain([
-//     addImportToAppModule(
-//       `
-//          TranslateModule,
-//          TranslateLoader
-//          `,
-//       "@ngx-translate/core",
-//       `
-//         TranslateModule.forRoot({
-//           loader: {
-//             provide: TranslateLoader,
-//             useFactory: translateHttpLoaderFactory,
-//             deps: [HttpClient]
-//           }
-//         })
-//         `
-//     ),
-// // addImportToAppModule(`HttpClientModule`, "@angular/common/http"),
-// // addImportToAppModule(`HttpClient`, "@angular/common/http", undefined, true),
-// // addImportToAppModule(
-// //   `TranslateHttpLoader`,
-// //   "@ngx-translate/http-loader",
-// //   undefined,
-// //   true
-// // ),
-// // insertStatement(
-// //   "src/app/app.module.ts",
-// //   `export function translateHttpLoaderFactory(http: HttpClient) {
-// //       return new TranslateHttpLoader(http);
-// //     }`
-// // ),
-// // addDepsToPackageJson(
-// //   {
-// //     "@ngx-translate/core": "13.0.0",
-// //     "@ngx-translate/http-loader": "6.0.0",
-// //   },
-//   {}
-// ),
-//   ]);
-// }
+
 
 export function updateStyles(options: any) {
   return (host: Tree) => {
@@ -256,7 +266,7 @@ export function updateStyles(options: any) {
     if (options.framework === 'bootstrap') {
       content = `@import "~bootstrap/dist/css/bootstrap.css";`;
     }
-    host.overwrite(`apps/${options.name}/src/styles.css`, content);
+    host.overwrite(`apps/${options.name}/src/styles.${options.style}`, content);
     return host;
   };
 }

@@ -28,7 +28,7 @@ function createSandbox() {
     stdio: [0, 1, 2],
   });
 
-  execSync(`npm install @ptg-ui/angular-schematics --silent`, {
+  execSync(`npm link @ptg-ui/angular-schematics --silent`, {
     cwd: tmpDir,
     stdio: [0, 1, 2],
   });
@@ -44,13 +44,14 @@ function createApp(tmpDir: string) {
   // const command = `${tmpDir}/node_modules/.bin/ng new --collection=${collection} --strict false`;
   const command = `${tmpDir}/node_modules/.bin/ng new --collection=${collection} --strict false`;
   console.log(command);
-  console.log('current directory', process.cwd());
+  // console.log('current directory', process.cwd());
   try {
     execSync(`${command}`, {
-      // stdio: [0, 1, 2],
+      stdio: [0, 1, 2],
       cwd: process.cwd(),
     });
   } catch(err) {
+
     console.log({err});
   }
   console.log('createApp Function Completed');

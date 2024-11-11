@@ -17,15 +17,11 @@ getArgs().then((appType) => {
 function invokeCli(appType: string) {
   switch (appType) {
     case "angular":
-      console.log("Angular Selected");
       invokeAngularGenerator();
       break;
     case "react":
-      console.log("React Selected");
-      console.log("React generator developed is in progress");
       invokeReactGenerator();
     break;
-  
     default:
       console.log(`${appType} generator is under development`);
       break;

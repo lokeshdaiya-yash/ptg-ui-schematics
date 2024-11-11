@@ -1,0 +1,126 @@
+
+import React from 'react';
+import styles from './app.module.css';
+import { Container, Row, Col } from 'react-bootstrap';
+import { useSelector, useDispatch } from "react-redux";
+import { NotesState } from "./store/reducer/notesReducer";
+import { addNote } from "./store/action/actions";
+import { useTranslation, Trans } from "react-i18next";
+import i18next, { default as i18n } from 'i18next';
+import './styles.css';
+import "./translations/i18n";
+
+export function App() {
+  const [note, setNote] = React.useState("");
+
+  const [langValue, setLangValue] = React.useState("en");
+
+  const { t, i18n } = useTranslation();
+  const changeLanguage = (e: any ) => {
+    setLangValue(e.target.value)
+    i18n.changeLanguage(e.target.value);
+  };
+
+  const updateNote = (e: any) => {
+    setNote(e.target.value);
+  };
+
+  const onAddNoteClick = () => {
+    if(note){
+      onAddNote(note);
+      setNote("");
+    }
+  };
+
+  const notes = useSelector<NotesState, NotesState["notes"]>(
+    (state) => state.notes
+  );
+  const dispatch = useDispatch();
+  const onAddNote = (note: string) => {
+    dispatch(addNote(note));
+  };
+
+  return (
+    <div className="app">
+    <header className="flex">
+       </header>
+      <Container>
+        <section>
+          <nav className="navbar navbar-light bg-white py-1">
+            <a className="navbar-brand">
+              <img
+                src="assets/images/YashLogo.jpg"
+                aria-label="logo"
+                style={{ height: 50, width: 84 }}
+              />
+            </a>
+            <div className="mr-13.5 float-end">
+            
+              <a className="select-top">
+                <img
+                  src="assets/images/language_2x.jpg"
+                  aria-label="logo"
+                  className="select-icon"
+                />
+                <select className="selectpicker select glyphicon glyphicon-cog" onChange={(e) => changeLanguage(e)} value={langValue}>
+                  <option value="en">English</option>
+                  <option value="zh">Chinese</option>
+                </select>
+              </a>
+            
+              <button className="btn rounded-pill text-white fw-normal mx-4">LOGIN</button>
+            </div>
+          </nav>
+        </section>
+      </Container>
+
+
+
+      <div className="loginContainer">
+        <Container>
+          <section className="pt-5">
+            <Row>
+              <Col xs={12} sm={12} md={12} lg={8}>
+                <h1 className="fw-bold lh-sm text-white">
+                  {t("welcomeTest")} <br />
+                  {t("welcome")}
+                </h1>
+                <p className="py-4 text-white">
+                The CLI is a powerful tool for creating, modifying, and maintaining any software project, and is particularly useful for customizing our UI projects. We can use this CLI to enforce architectural rules and conventions, making our projects consistent and inter-operative.
+                </p>
+
+                <Row className="d-flex my-4">
+                  <Col>
+                    <input
+                      onChange={updateNote}
+                      value={note}
+                      type="text"
+                      className="form-control rounded-pill"
+                      id="inputPassword2"
+                      placeholder="Type here..."
+                    />
+                  </Col>
+                  
+                  <Col>
+                    <button onClick={() => onAddNoteClick()} className="btn text-white mb-2 fw-normal rounded-pill">
+                      GENERATE
+                    </button>
+                  </Col>
+                  <ol>
+                    {notes.map((note) => {
+                      return <li key={note} className='data-list'>{note}</li>;
+                    })}
+                  </ol>
+                </Row>
+              
+              </Col>
+              <Col xs={12} sm={12} md={12} lg={4} className='loginImgContainer'><div className=" float-end" ><img src="assets/images/illustration 1.png" alt="" /></div></Col>
+            </Row>
+          </section>
+        </Container>
+      </div>
+    </div>
+  );
+}
+
+export default App;
