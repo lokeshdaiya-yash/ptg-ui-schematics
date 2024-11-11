@@ -148,5 +148,5 @@
       "x-prompt": "Would you like to configure i18n for this application?"
     }
   },
-  "required": []
+  "required": ["name"]
 }

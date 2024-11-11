@@ -81,6 +81,7 @@ export function application(options: any): Rule {
             MergeStrategy.Overwrite
           )
         : noop,
+      addDevdependenciesToPackageJSON(),
       setFramework(originalOptionsObject,isRootApp,appDir,originalOptionsObject.i18n),
       setNGRX(originalOptionsObject),
 
@@ -89,7 +90,17 @@ export function application(options: any): Rule {
   };
 }
 
+export function addDevdependenciesToPackageJSON(){
+  return chain([addDepsToPackageJson(
+    {},
+    {
+      "@types/node": "^12.11.1"
+    }
+  )])
+}
+
 export function setFramework(_options: any,isRootApp: boolean,appDir: string,isI18nSeleted:boolean): Rule {
+  
   if (_options.framework === "material") {
     return chain([addMaterialToPackageJson(), updateStyles(_options)]);
   }
@@ -127,7 +138,8 @@ export function setNGRX(_options: any): Rule {
         "@nrwl/angular": "~14.7.0",
         "@nrwl/workspace": "~14.7.0",
       },
-      {}
+      {
+      }
     ),
   ]);
 }
