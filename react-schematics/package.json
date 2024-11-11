@@ -1,10 +1,13 @@
 {
   "name": "@ptg-ui/react-schematics",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A schematics",
   "scripts": {
     "build": "tsc -p tsconfig.json -w",
     "test": "npm run build && jasmine src/**/*_spec.js"
+  },
+  "publishConfig": {
+    "registry": "https://pkgs.dev.azure.com/YASHTech-UIUX/YASH-UIUX-Library/_packaging/UI-packages/npm/registry/"
   },
   "keywords": [
     "schematics"
