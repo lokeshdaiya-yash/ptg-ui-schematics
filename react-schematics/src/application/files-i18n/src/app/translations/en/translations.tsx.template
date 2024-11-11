@@ -1,3 +1,4 @@
 export const TRANSLATIONS_EN = {
-    welcome:"Welcome to the tutorial",
+    welcomeTest: "Welcome...",
+    welcome:"to the Yash Technology Front End Code Generator Tool",
    };
