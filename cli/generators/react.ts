@@ -4,20 +4,20 @@ import inquirer = require('inquirer');
 export function reactAppGenerator() {
   getArgs().then((a) => {
     execSync(
-      `npx create-nx-workspace ${a.workspace}  --preset empty --nx-cloud=false`,
+      `npx create-nx-workspace@13.0.0 ${a.workspace}  --preset empty --nx-cloud=false`,
       {
         cwd: process.cwd(),
         stdio: [0, 1, 2],
       }
     );
     execSync(
-      `npm install @angular-devkit/core @angular-devkit/schematics --force`,
+      `npm install @angular-devkit/core@12.2.9 @angular-devkit/schematics@12.2.9 --force`,
       {
         cwd: `${process.cwd()}/${a.workspace}`,
         stdio: [0, 1, 2],
       }
     );
-    execSync(`npm install @ptg-ui/react-schematics --force`, {
+    execSync(`npm link @ptg-ui/react-schematics --force`, {
       cwd: `${process.cwd()}/${a.workspace}`,
       stdio: [0, 1, 2],
     });
@@ -108,7 +108,6 @@ function getArgs() {
       },
     ])
     .then((a) => {
-      console.log(a);
       return a;
     });
 }

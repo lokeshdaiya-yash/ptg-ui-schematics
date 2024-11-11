@@ -1,0 +1,4 @@
+export const TRANSLATIONS_ZH = {
+    welcomeTest: "欢迎...",
+    welcome:"到 亚什 技术 前端代码生成器工具",
+   };

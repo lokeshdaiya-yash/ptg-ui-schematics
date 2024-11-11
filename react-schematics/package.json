@@ -1,6 +1,6 @@
 {
   "name": "@ptg-ui/react-schematics",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A schematics",
   "scripts": {
     "build": "tsc -p tsconfig.json -w",
@@ -15,16 +15,9 @@
   "dependencies": {
     "@angular-devkit/core": "^12.2.9",
     "@angular-devkit/schematics": "^12.2.9",
-    "@nrwl/react": "^13.2.3",
-    "@angular/cdk": "^12.2.9",
-    "@angular/material": "^12.2.9",
-    "@nrwl/angular": "^12.9.0",
-    "@nrwl/devkit": "^12.9.0",
-    "@nrwl/workspace": "^12.9.0",
-    "@schematics/angular": "^12.2.9",
+    "@nrwl/react": "13.0.0",
+    "@nrwl/workspace": "13.0.0",
     "prettier": "^2.2.1",
-    "schematics-utilities": "^2.0.3",
-    "tmp": "^0.2.1",
     "typescript": "^4.4.3"
   },
   "devDependencies": {
