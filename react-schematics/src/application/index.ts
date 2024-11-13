@@ -242,6 +242,8 @@ export function addMaterialToPackageJson(): Rule {
       '@mui/material': '^5.2.3',
       '@emotion/react': '^11.7.0',
       '@emotion/styled': '^11.6.0',
+      'bootstrap': '^5.1.3',
+      'react-bootstrap': '^2.0.3',
     },
     {},
     false
