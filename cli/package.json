@@ -1,8 +1,11 @@
 {
   "name": "@ptg-ui/cli",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A cli",
   "main": "dist/index.js",
+  "publishConfig": {
+    "registry": "https://pkgs.dev.azure.com/YASHTech-UIUX/YASH-UIUX-Library/_packaging/UI-packages/npm/registry/"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "build:watch": "tsc -p tsconfig.json -w"

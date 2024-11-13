@@ -1,10 +1,14 @@
 {
   "name": "@ptg-ui/angular-schematics",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A schematics",
   "scripts": {
-    "build": "tsc -p tsconfig.json -w",
+    "build": "tsc -p tsconfig.json",
+    "build:watch": "tsc -p tsconfig.json -w",
     "test": "npm run build && jasmine src/**/*_spec.js"
+  },
+  "publishConfig": {
+    "registry": "https://pkgs.dev.azure.com/YASHTech-UIUX/YASH-UIUX-Library/_packaging/UI-packages/npm/registry/"
   },
   "keywords": [
     "schematics"
