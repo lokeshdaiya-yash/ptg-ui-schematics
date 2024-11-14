@@ -17,59 +17,62 @@ export function App() {
   };
 
   return (
-    <div className="app">
-    <header className="flex">
-       </header>
-      <Container>
+    <div>
+      <div className='headerContainer'>
         <section>
-          <nav className="navbar navbar-light bg-white py-1">
-            <a className="navbar-brand">
+          <nav className="navbar">
+            <a className="navbarBrand">
               <img
                 src="assets/images/YashLogo.jpg"
                 aria-label="logo"
                 style={{ height: 50, width: 84 }}
               />
             </a>
-            <div className="mr-13.5 float-end">
+              
+            <div className="actionContainer">
             
-              <a className="select-top">
+              <div className="selectDropdown">
                 <img
                   src="assets/images/language_2x.jpg"
                   aria-label="logo"
-                  className="select-icon"
+                  className="selectIcon"
                 />
-                <select className="selectpicker select glyphicon glyphicon-cog" onChange={(e) => changeLanguage(e)} value={langValue}>
-                  <option value="en">English</option>
+                <select className="formSelect" aria-label="Default select example" onChange={(e) => changeLanguage(e)} value={langValue}>
+                  <option selected value="en">English</option>
                   <option value="zh">Chinese</option>
                 </select>
-              </a>
+              </div>
             
-              <button className="btn rounded-pill text-white fw-normal mx-4">LOGIN</button>
+              <button className="loginBtn">LOGIN</button>
             </div>
           </nav>
         </section>
-      </Container>
+      </div>
 
 
 
       <div className="loginContainer">
-        <Container>
-          <section className="pt-5">
-            <Row>
-              <Col xs={12} sm={12} md={12} lg={8}>
-                <h1 className="fw-bold lh-sm text-white">
+        <div className='innerContainer'>
+          <section className="sectionContainer">
+            <div className="outerRow">
+              <div className="columnLeft">
+                <h1>
                   {t("welcomeTest")} <br />
                   {t("welcome")}
                 </h1>
-                <p className="py-4 text-white">
+                <p>
                 The CLI is a powerful tool for creating, modifying, and maintaining any software project, and is particularly useful for customizing our UI projects. We can use this CLI to enforce architectural rules and conventions, making our projects consistent and inter-operative.
                 </p>
+
               
-              </Col>
-              <Col xs={12} sm={12} md={12} lg={4} className='loginImgContainer'><div className=" float-end" ><img src="assets/images/illustration 1.png" alt="" /></div></Col>
-            </Row>
+              </div>
+                <div className='loginImgContainer '>
+                  <div className="floatEnd" ><img src="assets/images/illustration 1.png" alt="" /></div>
+                </div>
+ 
+            </div>
           </section>
-        </Container>
+        </div>
       </div>
     </div>
   );

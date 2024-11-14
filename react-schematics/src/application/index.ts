@@ -105,8 +105,21 @@ export default function (options: any): Rule {
           )
         : noop,
         !originalOptionsObject.routing && originalOptionsObject.redux && !originalOptionsObject.i18n
-        ? mergeWith(
-            apply(url('./files-redux'), [
+        ? originalOptionsObject.framework === 'material' ? mergeWith(
+            apply(url('./files-mui+redux'), [
+              applyTemplates({
+                utils: strings,
+                ...originalOptionsObject,
+                appName: originalOptionsObject.name,
+                isRootApp,
+              }),
+              move(`apps/${options.name}`),
+            ]),
+            MergeStrategy.Overwrite
+          )
+          :
+          mergeWith(
+            apply(url('./files-bootstrap+redux'), [
               applyTemplates({
                 utils: strings,
                 ...originalOptionsObject,

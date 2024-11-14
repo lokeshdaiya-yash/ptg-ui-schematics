@@ -31,13 +31,11 @@ export function App() {
   };
 
   return (
-    <div className="app">
-    <header className="flex">
-       </header>
-      <Container>
+    <div>
+      <div className='headerContainer'>
         <section>
-          <nav className="navbar navbar-light bg-white py-1">
-            <a className="navbar-brand">
+          <nav className="navbar">
+            <a className="navbarBrand">
               <img
                 src="assets/images/YashLogo.jpg"
                 aria-label="logo"
@@ -49,64 +47,69 @@ export function App() {
                   path="/"
                   render={() => (
                     <div>
-                      <Link to="/dashboard" className='mx-4 text-dark text-decoration-none fs-6'>Dashboard</Link>
-                      <Link to="/home" className='text-dark text-decoration-none fs-6'>Home</Link>
+                      <Link to="/dashboard" className='headerLink'>Dashboard</Link>
+                      <Link to="/home" className='headerLink'>Home</Link>
                     </div>
                   )}
                 />
               </div>
-            <div className="mr-13.5 float-end">
-            
-              <button className="btn rounded-pill text-white fw-normal mx-4">LOGIN</button>
+            <div className="actionContainer">
+              <button className="loginBtn">LOGIN</button>
             </div>
           </nav>
         </section>
-      </Container>
+      </div>
 
 
 
       <div className="loginContainer">
-        <Container>
-          <section className="pt-5">
-            <Row>
-              <Col xs={12} sm={12} md={12} lg={8}>
-                <h1 className="fw-bold lh-sm text-white">
+        <div className='innerContainer'>
+          <section className="sectionContainer">
+            <div className="outerRow">
+              <div className="columnLeft">
+                <h1>
                   Welcome... <br />
                   to the Yash Technology Front End Code Generator Tool
                 </h1>
-                <p className="py-4 text-white">
+                <p>
                 The CLI is a powerful tool for creating, modifying, and maintaining any software project, and is particularly useful for customizing our UI projects. We can use this CLI to enforce architectural rules and conventions, making our projects consistent and inter-operative.
                 </p>
 
-                <Row className="d-flex my-4">
-                  <Col>
+                <div className="innerRow">
+                  <div className="coulmn">
                     <input
                       onChange={updateNote}
                       value={note}
                       type="text"
-                      className="form-control rounded-pill"
+                      className="inputField"
                       id="inputPassword2"
                       placeholder="Type here..."
                     />
-                  </Col>
+                  </div>
                   
-                  <Col>
-                    <button onClick={() => onAddNoteClick()} className="btn text-white mb-2 fw-normal rounded-pill">
+                  <div className="coulmn">
+                    <button onClick={() => onAddNoteClick()}>
                       GENERATE
                     </button>
-                  </Col>
-                  <ol>
-                    {notes.map((note) => {
-                      return <li key={note} className='data-list'>{note}</li>;
-                    })}
-                  </ol>
-                </Row>
+                  </div>
+                  
+                </div>
+                <div className='paddingLeft'>
+                    <ol>
+                      {notes.map((note) => {
+                        return <li key={note} className='data-list'>{note}</li>;
+                      })}
+                    </ol>
+                  </div>
               
-              </Col>
-              <Col xs={12} sm={12} md={12} lg={4} className='loginImgContainer'><div className=" float-end" ><img src="assets/images/illustration 1.png" alt="" /></div></Col>
-            </Row>
+              </div>
+                <div className='loginImgContainer '>
+                  <div className="floatEnd" ><img src="assets/images/illustration 1.png" alt="" /></div>
+                </div>
+ 
+            </div>
           </section>
-        </Container>
+        </div>
       </div>
     </div>
   );
