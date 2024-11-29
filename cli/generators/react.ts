@@ -29,6 +29,13 @@ export function reactAppGenerator() {
         stdio: [0, 1, 2],
       }
     );
+    
+    if(a.routing){
+      execSync(`npm install --f react-router-dom@6.28.0`, {
+        cwd: `${process.cwd()}/${a.workspace}`,
+        stdio: [0, 1, 2],
+      });
+    }
   });
 }
 
