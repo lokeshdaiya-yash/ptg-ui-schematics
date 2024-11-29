@@ -5,7 +5,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { useSelector, useDispatch } from "react-redux";
 import { NotesState } from "./store/reducer/notesReducer";
 import { addNote } from "./store/action/actions";
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, Routes } from 'react-router-dom';
 import './styles.css';
 
 export function App() {
@@ -43,15 +43,37 @@ export function App() {
               />
             </a>
               <div>
-                <Route
-                  path="/"
-                  render={() => (
-                    <div>
-                      <Link to="/dashboard" className='headerLink'>Dashboard</Link>
-                      <Link to="/home" className='headerLink'>Home</Link>
-                    </div>
-                  )}
-                />
+                <Routes>
+                  <Route
+                    path="/"
+                    element={
+                      <>
+                        <Link to="/dashboard" className="headerLink">
+                          Dashboard
+                        </Link>
+                        <Link to="/home" className="headerLink">
+                          Home
+                        </Link>
+                      </>
+                    }
+                  />
+                  <Route
+                    path="/dashboard"
+                    element={
+                        <Link to="/home" className="headerLink">
+                          Home
+                        </Link>
+                    }
+                  />
+                  <Route
+                    path="/home"
+                    element={
+                        <Link to="/dashboard" className="headerLink">
+                          Dashboard
+                        </Link>
+                    }
+                  />
+                </Routes>
               </div>
             <div className="actionContainer">
               <button className="loginBtn">LOGIN</button>
