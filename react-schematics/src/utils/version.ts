@@ -1,0 +1,12 @@
+export const reactRouterDomVersion = "^6.28.0";
+export const reactReduxVersion = "^7.2.6";
+export const reduxVersion = "^4.1.2";
+export const i18nextVersion = "^21.6.3";
+export const i18nextBrowserLanguagedetectorVersion = "^6.1.2";
+export const reactI18nextVersion = "^11.15.1";
+export const materialUICoreVersion = "^4.12.3";
+export const muiMaterialVersion = "^5.2.3";
+export const emotionReactVersion = "^11.7.0";
+export const emotionStyledVersion = "^11.6.0";
+export const bootstrapVersion = "^5.1.3";
+export const reactBootstrapVersion = "^2.0.3";

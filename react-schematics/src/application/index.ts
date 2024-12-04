@@ -1,4 +1,4 @@
-import { strings } from '@angular-devkit/core';
+import { strings } from "@angular-devkit/core";
 import {
   apply,
   applyTemplates,
@@ -12,9 +12,22 @@ import {
   SchematicContext,
   Tree,
   url,
-} from '@angular-devkit/schematics';
-import { addDepsToPackageJson, getWorkspace } from '@nrwl/workspace';
-import { join, normalize } from 'path';
+} from "@angular-devkit/schematics";
+import { addDepsToPackageJson, getWorkspace } from "@nrwl/workspace";
+import { join, normalize } from "path";
+import {
+  reactReduxVersion,
+  reduxVersion,
+  i18nextVersion,
+  i18nextBrowserLanguagedetectorVersion,
+  reactI18nextVersion,
+  materialUICoreVersion,
+  muiMaterialVersion,
+  emotionReactVersion,
+  emotionStyledVersion,
+  bootstrapVersion,
+  reactBootstrapVersion,
+} from "../utils/version";
 
 // Instead of `any`, it would make sense here to get a schema-to-dts package and output the
 // interfaces so you get type-safe options.
@@ -22,10 +35,10 @@ export default function (options: any): Rule {
   return async (host: Tree, _context: SchematicContext) => {
     const workspace = await getWorkspace(host);
     const newProjectRoot =
-      (workspace.extensions.newProjectRoot as string | undefined) || '';
+      (workspace.extensions.newProjectRoot as string | undefined) || "";
     const isRootApp = options.projectRoot !== undefined;
     const appDir = isRootApp
-      ? normalize(options.projectRoot || '')
+      ? normalize(options.projectRoot || "")
       : join(normalize(newProjectRoot), strings.dasherize(options.name));
     options.appDir = appDir;
     var originalOptionsObject = JSON.parse(JSON.stringify(options));
@@ -34,13 +47,13 @@ export default function (options: any): Rule {
     return chain([
       (_tree: Tree, context: SchematicContext) => {
         // Show the options for this Schematics.
-        context.logger.info('Application: ' + JSON.stringify(options));
+        context.logger.info("Application: " + JSON.stringify(options));
       },
 
       // The schematic Rule calls the schematic from the same collection, with the options
       // passed in. Please note that if the schematic has a schema, the options will be
       // validated and could throw, e.g. if a required option is missing.
-      externalSchematic('@nrwl/react', 'application', {
+      externalSchematic("@nrwl/react", "application", {
         ...options,
       }),
       //schematic('my-other-schematic', { option: true }),
@@ -65,7 +78,7 @@ export default function (options: any): Rule {
       //                     if a file is binary or not).
 
       mergeWith(
-        apply(url('./files'), [
+        apply(url("./files"), [
           applyTemplates({
             utils: strings,
             ...originalOptionsObject,
@@ -76,9 +89,11 @@ export default function (options: any): Rule {
         ]),
         MergeStrategy.Overwrite
       ),
-      originalOptionsObject.routing && originalOptionsObject.redux && originalOptionsObject.i18n
+      originalOptionsObject.routing &&
+      originalOptionsObject.redux &&
+      originalOptionsObject.i18n
         ? mergeWith(
-            apply(url('./files-route+redux+i18n'), [
+            apply(url("./files-route+redux+i18n"), [
               applyTemplates({
                 utils: strings,
                 ...originalOptionsObject,
@@ -90,9 +105,11 @@ export default function (options: any): Rule {
             MergeStrategy.Overwrite
           )
         : noop,
-        originalOptionsObject.routing && !originalOptionsObject.redux && !originalOptionsObject.i18n
+      originalOptionsObject.routing &&
+      !originalOptionsObject.redux &&
+      !originalOptionsObject.i18n
         ? mergeWith(
-            apply(url('./files-route'), [
+            apply(url("./files-route"), [
               applyTemplates({
                 utils: strings,
                 ...originalOptionsObject,
@@ -104,22 +121,40 @@ export default function (options: any): Rule {
             MergeStrategy.Overwrite
           )
         : noop,
-        !originalOptionsObject.routing && originalOptionsObject.redux && !originalOptionsObject.i18n
-        ? originalOptionsObject.framework === 'material' ? mergeWith(
-            apply(url('./files-mui+redux'), [
-              applyTemplates({
-                utils: strings,
-                ...originalOptionsObject,
-                appName: originalOptionsObject.name,
-                isRootApp,
-              }),
-              move(`apps/${options.name}`),
-            ]),
-            MergeStrategy.Overwrite
-          )
-          :
-          mergeWith(
-            apply(url('./files-bootstrap+redux'), [
+      !originalOptionsObject.routing &&
+      originalOptionsObject.redux &&
+      !originalOptionsObject.i18n
+        ? originalOptionsObject.framework === "material"
+          ? mergeWith(
+              apply(url("./files-mui+redux"), [
+                applyTemplates({
+                  utils: strings,
+                  ...originalOptionsObject,
+                  appName: originalOptionsObject.name,
+                  isRootApp,
+                }),
+                move(`apps/${options.name}`),
+              ]),
+              MergeStrategy.Overwrite
+            )
+          : mergeWith(
+              apply(url("./files-bootstrap+redux"), [
+                applyTemplates({
+                  utils: strings,
+                  ...originalOptionsObject,
+                  appName: originalOptionsObject.name,
+                  isRootApp,
+                }),
+                move(`apps/${options.name}`),
+              ]),
+              MergeStrategy.Overwrite
+            )
+        : noop,
+      !originalOptionsObject.routing &&
+      !originalOptionsObject.redux &&
+      originalOptionsObject.i18n
+        ? mergeWith(
+            apply(url("./files-i18n"), [
               applyTemplates({
                 utils: strings,
                 ...originalOptionsObject,
@@ -131,9 +166,11 @@ export default function (options: any): Rule {
             MergeStrategy.Overwrite
           )
         : noop,
-        !originalOptionsObject.routing && !originalOptionsObject.redux && originalOptionsObject.i18n
+      originalOptionsObject.routing &&
+      originalOptionsObject.redux &&
+      !originalOptionsObject.i18n
         ? mergeWith(
-            apply(url('./files-i18n'), [
+            apply(url("./files-route+redux"), [
               applyTemplates({
                 utils: strings,
                 ...originalOptionsObject,
@@ -145,9 +182,11 @@ export default function (options: any): Rule {
             MergeStrategy.Overwrite
           )
         : noop,
-        originalOptionsObject.routing && originalOptionsObject.redux && !originalOptionsObject.i18n
+      originalOptionsObject.routing &&
+      !originalOptionsObject.redux &&
+      originalOptionsObject.i18n
         ? mergeWith(
-            apply(url('./files-route+redux'), [
+            apply(url("./files-route+i18n"), [
               applyTemplates({
                 utils: strings,
                 ...originalOptionsObject,
@@ -159,9 +198,11 @@ export default function (options: any): Rule {
             MergeStrategy.Overwrite
           )
         : noop,
-        originalOptionsObject.routing && !originalOptionsObject.redux && originalOptionsObject.i18n
+      !originalOptionsObject.routing &&
+      originalOptionsObject.redux &&
+      originalOptionsObject.i18n
         ? mergeWith(
-            apply(url('./files-route+i18n'), [
+            apply(url("./files-redux+i18n"), [
               applyTemplates({
                 utils: strings,
                 ...originalOptionsObject,
@@ -173,23 +214,11 @@ export default function (options: any): Rule {
             MergeStrategy.Overwrite
           )
         : noop,
-        !originalOptionsObject.routing && originalOptionsObject.redux && originalOptionsObject.i18n
+      !originalOptionsObject.routing &&
+      !originalOptionsObject.redux &&
+      !originalOptionsObject.i18n
         ? mergeWith(
-            apply(url('./files-redux+i18n'), [
-              applyTemplates({
-                utils: strings,
-                ...originalOptionsObject,
-                appName: originalOptionsObject.name,
-                isRootApp,
-              }),
-              move(`apps/${options.name}`),
-            ]),
-            MergeStrategy.Overwrite
-          )
-        : noop,
-        !originalOptionsObject.routing && !originalOptionsObject.redux && !originalOptionsObject.i18n
-        ? mergeWith(
-            apply(url('./files-route'), [
+            apply(url("./files-route"), [
               applyTemplates({
                 utils: strings,
                 ...originalOptionsObject,
@@ -205,11 +234,11 @@ export default function (options: any): Rule {
   };
 }
 export function setFramework(options: any) {
-  if (options.framework === 'material') {
+  if (options.framework === "material") {
     return chain([addMaterialToPackageJson()]);
   }
 
-  if (options.framework === 'bootstrap') {
+  if (options.framework === "bootstrap") {
     return chain([addBootstrapToPackageJson(), updateStyles(options)]);
   }
   return noop;
@@ -222,8 +251,8 @@ export function setReduxTpPackageJson(options: any): Rule {
   return chain([
     addDepsToPackageJson(
       {
-        'react-redux': '^7.2.6',
-        redux: '^4.1.2',
+        "react-redux": reactReduxVersion,
+        redux: reduxVersion,
       },
       {},
       false
@@ -238,9 +267,10 @@ export function setI18nToPackageJson(options: any): Rule {
   return chain([
     addDepsToPackageJson(
       {
-        i18next: '^21.6.3',
-        'i18next-browser-languagedetector': '^6.1.2',
-        'react-i18next': '^11.15.1',
+        i18next: i18nextVersion,
+        "i18next-browser-languagedetector":
+          i18nextBrowserLanguagedetectorVersion,
+        "react-i18next": reactI18nextVersion,
       },
       {},
       false
@@ -251,10 +281,10 @@ export function setI18nToPackageJson(options: any): Rule {
 export function addMaterialToPackageJson(): Rule {
   return addDepsToPackageJson(
     {
-      '@material-ui/core': '^4.12.3',
-      '@mui/material': '^5.2.3',
-      '@emotion/react': '^11.7.0',
-      '@emotion/styled': '^11.6.0',
+      "@material-ui/core": materialUICoreVersion,
+      "@mui/material": muiMaterialVersion,
+      "@emotion/react": emotionReactVersion,
+      "@emotion/styled": emotionStyledVersion,
     },
     {},
     false
@@ -264,19 +294,18 @@ export function addMaterialToPackageJson(): Rule {
 export function addBootstrapToPackageJson(): Rule {
   return addDepsToPackageJson(
     {
-      bootstrap: '^5.1.3',
-      'react-bootstrap': '^2.0.3',
+      bootstrap: bootstrapVersion,
+      "react-bootstrap": reactBootstrapVersion,
     },
     {},
     false
   );
 }
 
-
 export function updateStyles(options: any) {
   return (host: Tree) => {
     let content = ``;
-    if (options.framework === 'bootstrap') {
+    if (options.framework === "bootstrap") {
       content = `@import "~bootstrap/dist/css/bootstrap.css";`;
     }
     host.overwrite(`apps/${options.name}/src/styles.${options.style}`, content);
