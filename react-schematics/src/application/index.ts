@@ -47,7 +47,7 @@ export default function (options: any): Rule {
     return chain([
       (_tree: Tree, context: SchematicContext) => {
         // Show the options for this Schematics.
-        context.logger.info("Application: " + JSON.stringify(options));
+        context.logger.info("Application->: " + JSON.stringify(options));
       },
 
       // The schematic Rule calls the schematic from the same collection, with the options
@@ -57,9 +57,12 @@ export default function (options: any): Rule {
         ...options,
       }),
       //schematic('my-other-schematic', { option: true }),
-      setFramework(originalOptionsObject),
+      setFramework(originalOptionsObject, isRootApp),
       setReduxTpPackageJson(originalOptionsObject),
       setI18nToPackageJson(originalOptionsObject),
+      originalOptionsObject.redux &&
+        originalOptionsObject.i18n &&
+        addDashboardToProject(originalOptionsObject, isRootApp),
       // The mergeWith() rule merge two trees; one that's coming from a Source (a Tree with no
       // base), and the one as input to the rule. You can think of it like rebasing a Source on
       // top of your current set of changes. In this case, the Source is that apply function.
@@ -233,15 +236,21 @@ export default function (options: any): Rule {
     ]);
   };
 }
-export function setFramework(options: any) {
+export function setFramework(options: any, isRootApp: boolean) {
+  const tasks = [];
   if (options.framework === "material") {
-    return chain([addMaterialToPackageJson()]);
+    tasks.push(addMaterialToPackageJson());
   }
 
-  if (options.framework === "bootstrap") {
-    return chain([addBootstrapToPackageJson(), updateStyles(options)]);
+  if (options.auth === "msal") {
+    tasks.push(addLoginToProject(options, isRootApp));
   }
-  return noop;
+  if (options.framework === "bootstrap") {
+    tasks.push(addBootstrapToPackageJson());
+    tasks.push(updateStyles(options));
+  }
+  if (tasks.length > 0) return chain(tasks);
+  else return noop;
 }
 
 export function setReduxTpPackageJson(options: any): Rule {
@@ -276,6 +285,38 @@ export function setI18nToPackageJson(options: any): Rule {
       false
     ),
   ]);
+}
+
+export function addDashboardToProject(_options: any, isRootApp: boolean): Rule {
+  let inputUrl = "./components/";
+  return mergeWith(
+    apply(url(inputUrl), [
+      applyTemplates({
+        utils: strings,
+        ..._options,
+        appName: "components",
+        isRootApp,
+      }),
+      move(`apps/${_options.name}/src/app/components/`),
+    ]),
+    MergeStrategy.Overwrite
+  );
+}
+
+export function addLoginToProject(_options: any, isRootApp: boolean): Rule {
+  let inputUrl = "./login/";
+  return mergeWith(
+    apply(url(inputUrl), [
+      applyTemplates({
+        utils: strings,
+        ..._options,
+        appName: "components",
+        isRootApp,
+      }),
+      move(`apps/${_options.name}/src/app/login/`),
+    ]),
+    MergeStrategy.Overwrite
+  );
 }
 
 export function addMaterialToPackageJson(): Rule {

@@ -1,0 +1,69 @@
+import { PtgUiLogin } from '@ptg-ui/react';
+import '@ptg-ui/react/lib/styles/index.css';
+import { useMsal } from '@azure/msal-react';
+import { useState } from 'react';
+
+const Login = () => {
+  const { instance, accounts } = useMsal();
+  const initialValue = {
+    email: '',
+    password: '',
+  };
+  const [user, setUser] = useState(initialValue);
+  const [isEmailValid, setIsEmailValid] = useState(true);
+
+  const validate = (value: any) => {
+    let formErr = true;
+    const regexEmail = /^[^s@]+@[^s@]+.[^s@]{2,}$/i;
+    if (value === '' || value ? true : false !== regexEmail.test(value)) {
+      if (!regexEmail.test(value)) {
+        formErr = false;
+      }
+    }
+    setIsEmailValid(formErr);
+  };
+
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    name === 'email' && validate(value);
+    setUser({ ...user, [name]: value });
+  };
+
+  const onLoginClick = () => {};
+  const onMsalClick = () => {};
+
+  // useEffect(() => {
+  //   if (!accounts.length) {
+  //     // due to Strict mode in dev code executes two times hance added below code
+  //     sessionStorage.removeItem('msal.interaction.status');
+  //     instance.loginRedirect({
+  //       scopes: environment.scopes,
+  //     });
+  //   }
+  // }, [accounts, instance]);
+
+  return (
+    <PtgUiLogin
+      emailLabel={'User Email'}
+      passwordLabel={'Password'}
+      emailPlaceolder={'Enter Email'}
+      passwordPlaceolder={'Enter Password'}
+      loginButtonName={'LOG IN'}
+      signupMsg={"If you don't have an account click on"}
+      signupButtonName={'SIGN UP'}
+      msalButtonName={'MSAL'}
+      forgotPasswordLabel={'Forgot Password'}
+      imgPath={
+        'https://www.yash.com/wp-content/themes/html5blank-stable/images/yash-logo-new.svg'
+      }
+      handleChange={(e: any) => handleChange(e)}
+      user={user}
+      emailType={'email'}
+      passwordType={'password'}
+      isEmailValid={isEmailValid}
+      onLoginClick={() => onLoginClick()}
+      onMsalClick={() => onMsalClick()}
+    />
+  );
+};
+export default Login;
