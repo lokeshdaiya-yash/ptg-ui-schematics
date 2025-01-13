@@ -41,16 +41,13 @@ export function App() {
                 style={{ height: 50, width: 84 }}
               />
             </a>
-              
+
             <div className="actionContainer">
-            
               <button className="loginBtn">LOGIN</button>
             </div>
           </nav>
         </section>
       </div>
-
-
 
       <div className="loginContainer">
         <div className='innerContainer'>
@@ -76,27 +73,25 @@ export function App() {
                       placeholder="Type here..."
                     />
                   </div>
-                  
+
                   <div className="coulmn">
                     <button onClick={() => onAddNoteClick()}>
                       GENERATE
                     </button>
                   </div>
-                  
                 </div>
+
                 <div className='paddingLeft'>
-                    <ol>
-                      {notes.map((note) => {
-                        return <li key={note} className='data-list'>{note}</li>;
-                      })}
-                    </ol>
-                  </div>
-              
-              </div>
-                <div className='loginImgContainer '>
-                  <div className="floatEnd" ><img src="assets/images/illustration 1.png" alt="" /></div>
+                  <ol>
+                    {notes.map((note) => {
+                      return <li key={note} className='data-list'>{note}</li>;
+                    })}
+                  </ol>
                 </div>
- 
+              </div>
+              <div className='loginImgContainer '>
+                <div className="floatEnd" ><img src="assets/images/illustration 1.png" alt="" /></div>
+              </div>
             </div>
           </section>
         </div>

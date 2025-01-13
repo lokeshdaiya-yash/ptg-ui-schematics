@@ -23,7 +23,7 @@ export function reactAppGenerator() {
     });
 
     execSync(
-      `nx generate @ptg-ui/react-schematics:application --name ${a.name} --style ${a.style} --framework ${a.framework} --routing ${a.routing} --redux ${a.redux} --i18n ${a.i18n}`,
+      `nx generate @ptg-ui/react-schematics:application --name ${a.name} --style ${a.style} --framework ${a.framework} --routing ${a.routing} --redux ${a.redux} --i18n ${a.i18n} --auth ${a.auth}`,
       {
         cwd: `${process.cwd()}/${a.workspace}`,
         stdio: [0, 1, 2],
@@ -72,6 +72,20 @@ function getArgs() {
       label: "LESS",
     },
   ];
+  const authOptions: { value: string; label: string }[] = [
+    {
+      value: "none",
+      label: "None",
+    },
+    {
+      value: "msal",
+      label: "Msal",
+    },
+    {
+      value: "okta",
+      label: "Okta",
+    },
+  ];
   return inquirer
     .prompt([
       {
@@ -97,6 +111,13 @@ function getArgs() {
         type: "list",
         default: "css",
         choices: styleOptions,
+      },
+      {
+        name: "auth",
+        message: "Which login authentication would you like to use?",
+        type: "list",
+        default: "none",
+        choices: authOptions,
       },
       {
         name: "routing",

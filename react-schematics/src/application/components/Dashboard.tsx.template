@@ -1,0 +1,89 @@
+import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { NotesState } from '../store/reducer/notesReducer';
+import { addNote } from '../store/action/actions';
+
+const DashboardComponent = () => {
+  const [note, setNote] = useState('');
+  const { t } = useTranslation();
+
+  const updateNote = (e: any) => {
+    setNote(e.target.value);
+  };
+
+  const onAddNote = (note: string) => {
+    dispatch(addNote(note));
+  };
+
+  const onAddNoteClick = () => {
+    if (note) {
+      onAddNote(note);
+      setNote('');
+    }
+  };
+
+  const dispatch = useDispatch();
+
+  const notes = useSelector<NotesState, NotesState['notes']>(
+    (state) => state.notes
+  );
+
+  return (
+    <div className="loginContainer">
+      <div className="innerContainer">
+        <section className="sectionContainer">
+          <div className="outerRow">
+            <div className="columnLeft">
+              <h1>
+                {t('welcomeTest')} <br />
+                {t('welcome')}
+              </h1>
+              <p>
+                The CLI is a powerful tool for creating, modifying, and
+                maintaining any software project, and is particularly useful for
+                customizing our UI projects. We can use this CLI to enforce
+                architectural rules and conventions, making our projects
+                consistent and inter-operative.
+              </p>
+
+              <div className="innerRow">
+                <div className="coulmn">
+                  <input
+                    onChange={updateNote}
+                    value={note}
+                    type="text"
+                    className="inputField"
+                    id="inputPassword2"
+                    placeholder="Type here..."
+                  />
+                </div>
+
+                <div className="coulmn">
+                  <button onClick={() => onAddNoteClick()}>GENERATE</button>
+                </div>
+              </div>
+              <div className="paddingLeft">
+                <ol>
+                  {notes.map((note: any) => {
+                    return (
+                      <li key={note} className="data-list">
+                        {note}
+                      </li>
+                    );
+                  })}
+                </ol>
+              </div>
+            </div>
+            <div className="loginImgContainer ">
+              <div className="floatEnd">
+                <img src="assets/images/illustration 1.png" alt="" />
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+};
+export default DashboardComponent;

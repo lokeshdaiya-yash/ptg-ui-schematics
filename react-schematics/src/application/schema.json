@@ -14,7 +14,7 @@
     "style": {
       "type": "string"
     },
-    "framework":{
+    "framework": {
       "type": "string"
     },
     "routing": {
@@ -23,9 +23,12 @@
     "redux": {
       "type": "boolean"
     },
-    "i18n":{
+    "i18n": {
       "type": "boolean"
-    }    
+    },
+    "auth": {
+      "type": "string"
+    }
   },
   "required": ["name"]
 }
