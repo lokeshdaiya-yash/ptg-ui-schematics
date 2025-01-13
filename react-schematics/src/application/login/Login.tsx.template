@@ -1,4 +1,4 @@
-import { PtgUiLogin } from '@ptg-ui/react';
+// import { PtgUiLogin } from '@ptg-ui/react';
 import '@ptg-ui/react/lib/styles/index.css';
 import { useMsal } from '@azure/msal-react';
 import { useState } from 'react';
@@ -43,7 +43,8 @@ const Login = () => {
   // }, [accounts, instance]);
 
   return (
-    <PtgUiLogin
+    <div>
+    {/* <PtgUiLogin
       emailLabel={'User Email'}
       passwordLabel={'Password'}
       emailPlaceolder={'Enter Email'}
@@ -63,7 +64,8 @@ const Login = () => {
       isEmailValid={isEmailValid}
       onLoginClick={() => onLoginClick()}
       onMsalClick={() => onMsalClick()}
-    />
+    /> */}
+    </div>
   );
 };
 export default Login;
