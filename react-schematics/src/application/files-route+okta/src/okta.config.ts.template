@@ -1,0 +1,15 @@
+import { OktaAuthOptions } from '@okta/okta-auth-js';
+
+const CLIENT_ID = '0oamtv0rscgQx9UE55d7';
+const ISSUER = 'https://dev-14672215.okta.com/oauth2/default';
+const REDIRECT_URI = `http://localhost:4200/login/callback`;
+// localhost:4200/login
+
+// eslint-disable-next-line import/no-anonymous-default-export
+const config: OktaAuthOptions = {
+  clientId: CLIENT_ID,
+  issuer: ISSUER,
+  redirectUri: REDIRECT_URI,
+  scopes: ['openid', 'offline_access', 'profile', 'email'],
+};
+export default config;

@@ -1,0 +1,259 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+/* body css */
+.loginContainer {
+  background-color: #212129;
+}
+.innerContainer {
+  max-width: 1140px;
+  --bs-gutter-x: 1.5rem;
+  --bs-gutter-y: 0;
+  width: 100%;
+  padding-right: calc(var(--bs-gutter-x) * 0.5);
+  padding-left: calc(var(--bs-gutter-x) * 0.5);
+  margin-right: auto;
+  margin-left: auto;
+}
+.sectionContainer {
+  padding-top: 3rem !important;
+}
+.outerRow {
+  --bs-gutter-x: 1.5rem;
+  --bs-gutter-y: 0;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: calc(-1 * var(--bs-gutter-y));
+  margin-right: calc(-0.5 * var(--bs-gutter-x));
+  margin-left: calc(-0.5 * var(--bs-gutter-x));
+}
+.innerRow {
+  display: flex !important;
+  --bs-gutter-x: 1.5rem;
+  --bs-gutter-y: 0;
+  flex-wrap: wrap;
+  margin-top: calc(-1 * var(--bs-gutter-y));
+  margin-right: calc(-0.5 * var(--bs-gutter-x));
+  margin-left: calc(-0.5 * var(--bs-gutter-x));
+}
+.coulmn {
+  flex: 1 0 0%;
+  flex-basis: 0;
+  flex-grow: 1;
+  position: relative;
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: 20px;
+}
+.inputField {
+  font-size: 14px;
+  border-radius: var(--bs-border-radius-pill);
+  display: block;
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-weight: 400;
+  line-height: 1.5;
+  appearance: none;
+  background-clip: padding-box;
+  border: 1px solid #ddd;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  margin: 0;
+}
+.columnLeft {
+  flex: 0 0 66.666667%;
+  max-width: 66.666667%;
+}
+.loginImgContainer {
+  height: 443px;
+  overflow: hidden;
+  background-position: right;
+  flex: 0 0 auto;
+  width: 33.33333333%;
+}
+.loginImgContainer image {
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  object-fit: contain;
+  float: right !important;
+}
+.loginContainer p {
+  color: #fff;
+  font-size: 16px;
+  --bs-text-opacity: 1;
+  padding-top: 1.5rem !important;
+  padding-bottom: 1.5rem !important;
+}
+.loginContainer h1 {
+  --bs-text-opacity: 1;
+  color: #fff;
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.25 !important;
+}
+.loginContainer input,
+.loginContainer button {
+  font-size: 14px;
+}
+.loginContainer button {
+  background-color: #f6190d;
+  border: 1px solid #f6190d;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 50px;
+  color: #fff !important;
+  padding-top: 0.7rem !important;
+  padding-bottom: 0.7rem !important;
+  padding-right: 1rem !important;
+  padding-left: 1rem !important;
+  margin-bottom: 0.5rem !important;
+}
+.btn:hover {
+  background-color: #f6190d;
+}
+.floatEnd {
+  float: right !important;
+}
+.data-list {
+  color: #fff;
+}
+.paddingLeft {
+  padding: 20px;
+}
+
+/* new css */
+.headerContainer {
+  margin: 0 auto;
+}
+.formSelect {
+  height: 35px;
+  appearance: none;
+  padding-right: 30px;
+  background-image: url("../assets/images/Path 401.svg");
+  background-repeat: no-repeat;
+  background-position: right 20px center;
+  width: 180px;
+  border: 1px solid #d2d2d2;
+  border-radius: 50px;
+  opacity: 1;
+  padding-left: 50px;
+  outline: none;
+}
+.navbar {
+  --bs-bg-opacity: 1;
+  background-color: #fff;
+  padding-top: 0.25rem !important;
+  padding-bottom: 0.25rem !important;
+  --bs-navbar-padding-x: 0;
+  --bs-navbar-padding-y: 0.5rem;
+  --bs-navbar-color: rgba(var(--bs-emphasis-color-rgb), 0.65);
+  --bs-navbar-hover-color: rgba(var(--bs-emphasis-color-rgb), 0.8);
+  --bs-navbar-disabled-color: rgba(var(--bs-emphasis-color-rgb), 0.3);
+  --bs-navbar-active-color: rgba(var(--bs-emphasis-color-rgb), 1);
+  --bs-navbar-brand-padding-y: 0.3125rem;
+  --bs-navbar-brand-margin-end: 1rem;
+  --bs-navbar-brand-font-size: 1.25rem;
+  --bs-navbar-brand-color: rgba(var(--bs-emphasis-color-rgb), 1);
+  --bs-navbar-brand-hover-color: rgba(var(--bs-emphasis-color-rgb), 1);
+  --bs-navbar-nav-link-padding-x: 0.5rem;
+  --bs-navbar-toggler-padding-y: 0.25rem;
+  --bs-navbar-toggler-padding-x: 0.75rem;
+  --bs-navbar-toggler-font-size: 1.25rem;
+  --bs-navbar-toggler-icon-bg: url(
+    data:image/svg + xml,
+    %3csvgxmlns="http://www.w3.org/2000/svg"viewBox="0 0 30 30"%3e%3cpathstroke="rgba%2833, 37, 41, 0.75%29"stroke-linecap="round"stroke-miterlimit="10"stroke-width="2"d="M4 7h22M4 15h22M4 23h22"/%3e%3c/svg%3e
+  );
+  --bs-navbar-toggler-border-color: rgba(var(--bs-emphasis-color-rgb), 0.15);
+  --bs-navbar-toggler-border-radius: var(--bs-border-radius);
+  --bs-navbar-toggler-focus-width: 0.25rem;
+  --bs-navbar-toggler-transition: box-shadow 0.15s ease-in-out;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+.navbarBrand {
+  padding-top: var(--bs-navbar-brand-padding-y);
+  padding-bottom: var(--bs-navbar-brand-padding-y);
+  margin-right: var(--bs-navbar-brand-margin-end);
+  font-size: var(--bs-navbar-brand-font-size);
+  color: var(--bs-navbar-brand-color);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.headerLink {
+  --bs-text-opacity: 1;
+  color: rgba(var(--bs-dark-rgb), var(--bs-text-opacity)) !important;
+  text-decoration: none !important;
+  font-size: 1rem !important;
+  margin-right: 1.5rem !important;
+  margin-left: 1.5rem !important;
+}
+.actionContainer {
+  display: flex !important;
+  float: right !important;
+}
+.selectDropdown {
+  position: relative;
+  text-decoration: none !important;
+}
+.selectIcon {
+  height: 16px;
+  width: 16px;
+  position: absolute;
+  top: 10px;
+  left: 16px;
+}
+.loginBtn {
+  background-color: #f6190d;
+  border: 1px solid #f6190d;
+  border-radius: 50px !important;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  --bs-text-opacity: 1;
+  color: #fff !important;
+  padding-right: 1rem !important;
+  padding-left: 1rem !important;
+  margin-right: 0 !important;
+  margin-left: 1.5rem !important;
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+.loginBtn:active {
+  background: #f6190d !important;
+  border: 1px solid #f6190d;
+}
+
+@media (min-width: 576px) {
+  .innerContainer {
+    padding: 20px;
+  }
+}
+@media (min-width: 768px) {
+  .innerContainer,
+  .headerContainer {
+    max-width: 720px;
+  }
+}
+@media (min-width: 992px) {
+  .innerContainer,
+  .headerContainer {
+    max-width: 960px;
+  }
+}
+@media (max-width: 992px) {
+  .loginImgContainer {
+    display: none;
+  }
+}
+@media (min-width: 1200px) {
+  .innerContainer,
+  .headerContainer {
+    max-width: 1140px;
+  }
+}

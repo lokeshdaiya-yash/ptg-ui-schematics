@@ -24,6 +24,11 @@ export function reactAppGenerator() {
           cwd: `${process.cwd()}/${a.workspace}`,
           stdio: [0, 1, 2],
         });
+      } else if (a.auth === "okta") {
+        execSync("npm i @okta/okta-auth-js @okta/okta-react", {
+          cwd: `${process.cwd()}/${a.workspace}`,
+          stdio: [0, 1, 2],
+        });
       }
     }
 
