@@ -1,0 +1,105 @@
+
+import OktaAuth, { toRelativeUrl } from '@okta/okta-auth-js';
+import { LoginCallback, Security } from '@okta/okta-react';
+import config from './../okta.config';
+import { LoginButton } from './login-button';
+import { useState } from 'react';
+
+import { Link, Route, Routes, useNavigate} from 'react-router-dom';
+
+import './styles.css';
+
+export function App() {
+  const [userName, setUserName] = useState<string | undefined>(null);
+  const navigate = useNavigate();
+  const oktaAuth = new OktaAuth(config);
+  
+  const restoreOriginalUri = (_oktaAuth: OktaAuth, originalUri: string) => {
+      _oktaAuth.getUser().then(user => setUserName(user.name));
+    navigate(toRelativeUrl(originalUri || '/', window.location.origin));
+  };
+
+  return (
+    <Security oktaAuth={oktaAuth} restoreOriginalUri={restoreOriginalUri}>
+      <div>
+        <div className='headerContainer'>
+          <section>
+            <nav className="navbar">
+              <a className="navbarBrand">
+                <img
+                  src="assets/images/YashLogo.jpg"
+                  aria-label="logo"
+                  style={{ height: 50, width: 84 }}
+                />
+              </a>
+              <div>
+                <Routes>
+                  <Route
+                    path="/"
+                    element={
+                      <>
+                        <Link to="/dashboard" className="headerLink">
+                          Dashboard
+                        </Link>
+                        <Link to="/home" className="headerLink">
+                          Home
+                        </Link>
+                      </>
+                    }
+                  />
+                  <Route
+                    path="/dashboard"
+                    element={
+                      <Link to="/home" className="headerLink">
+                        Home
+                      </Link>
+                    }
+                  />
+                  <Route
+                    path="/home"
+                    element={
+                      <Link to="/dashboard" className="headerLink">
+                        Dashboard
+                      </Link>
+                    }
+                  />
+                  <Route path="/login/callback" element={<LoginCallback />}></Route>
+                </Routes>
+              </div>
+              <div className="actionContainer">
+                <LoginButton></LoginButton>
+              </div>
+            </nav>
+          </section>
+        </div>
+
+
+
+        <div className="loginContainer">
+          <div className='innerContainer'>
+            <section className="sectionContainer">
+              <div className="outerRow">
+                <div className="columnLeft">
+                  <h1>
+                    Welcome... {userName}<br />
+                    to the Yash Technology Front End Code Generator Tool
+                  </h1>
+                  <p>
+                    The CLI is a powerful tool for creating, modifying, and maintaining any software project, and is particularly useful for customizing our UI projects. We can use this CLI to enforce architectural rules and conventions, making our projects consistent and inter-operative.
+                  </p>
+
+                </div>
+                <div className='loginImgContainer '>
+                  <div className="floatEnd" ><img src="assets/images/illustration 1.png" alt="" /></div>
+                </div>
+
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </Security>
+  );
+}
+
+export default App;
