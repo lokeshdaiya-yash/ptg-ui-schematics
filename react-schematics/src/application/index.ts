@@ -35,13 +35,13 @@ export default function (options: any): Rule {
   return async (host: Tree, _context: SchematicContext) => {
     const workspace = await getWorkspace(host);
     const newProjectRoot =
-      (workspace.extensions.newProjectRoot as string | undefined) || "";
+      (workspace.extensions.newProjectRoot as string | undefined) ?? "";
     const isRootApp = options.projectRoot !== undefined;
     const appDir = isRootApp
       ? normalize(options.projectRoot || "")
       : join(normalize(newProjectRoot), strings.dasherize(options.name));
     options.appDir = appDir;
-    var originalOptionsObject = JSON.parse(JSON.stringify(options));
+    let originalOptionsObject = JSON.parse(JSON.stringify(options));
     // The chain rule allows us to chain multiple rules and apply them one after the other.
 
     return chain([
