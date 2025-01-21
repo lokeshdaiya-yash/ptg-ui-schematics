@@ -17,6 +17,16 @@ export function reactAppGenerator() {
         stdio: [0, 1, 2],
       }
     );
+
+    if (a.auth) {
+      if (a.auth === "msal") {
+        execSync(`npm i @azure/msal-react @azure/msal-browser`, {
+          cwd: `${process.cwd()}/${a.workspace}`,
+          stdio: [0, 1, 2],
+        });
+      }
+    }
+
     execSync(`npm install @ptg-ui/react-schematics --force`, {
       cwd: `${process.cwd()}/${a.workspace}`,
       stdio: [0, 1, 2],
@@ -74,8 +84,8 @@ function getArgs() {
   ];
   const authOptions: { value: string; label: string }[] = [
     {
-      value: "none",
-      label: "None",
+      value: "custom",
+      label: "Custom",
     },
     {
       value: "msal",
@@ -116,7 +126,7 @@ function getArgs() {
         name: "auth",
         message: "Which login authentication would you like to use?",
         type: "list",
-        default: "none",
+        default: "custom",
         choices: authOptions,
       },
       {

@@ -3,18 +3,30 @@ import { useTranslation } from 'react-i18next';
 import { Route, Link, Routes } from 'react-router-dom';
 import './styles.css';
 import './translations/i18n';
-// import Login from './login/Login';
 import DashboardComponent from './components/Dashboard';
-
+<% if (auth == 'custom') { %>import Login from './login/Login';<% } %>
+<% if (auth == 'msal') { %>
+import { useMsal } from '@azure/msal-react';
+import { loginRequest } from './login/authConfig';
+<% } %>
 export function App() {
+  <% if (auth == 'msal') { %>
+  const { instance } = useMsal();
+  <% } %>
+  const { i18n } = useTranslation();
   const [langValue, setLangValue] = useState('en');
 
-  const { i18n } = useTranslation();
   const changeLanguage = (e: any) => {
     setLangValue(e.target.value);
     i18n.changeLanguage(e.target.value);
   };
-
+  <% if (auth == 'msal') { %>
+  const handleLogin = () => {
+    instance.loginRedirect(loginRequest).catch((e) => {
+      console.error(e);
+    });
+  };
+  <% } %>
   return (
     <div>
       <div className="headerContainer">
@@ -55,10 +67,19 @@ export function App() {
                 </select>
               </div>
 
-              {/* <Link to="/login" className="loginBtn headerLink">
-                Login
-              </Link> */}
+              <% if (auth === 'custom') { %>
+                <Link to="/login" className="loginBtn headerLink">
+                  Login
+                </Link>
+              <% } %>
+              <% if (auth === 'msal') { %>
+                <button onClick={handleLogin} className="loginBtn">
+                  LOGIN
+                </button>
+              <% } %>
+              <% if (auth === 'okta') { %>
               <button className="loginBtn">LOGIN</button>
+              <% }%>
             </div>
           </nav>
         </section>
@@ -67,7 +88,9 @@ export function App() {
         <Route path="/" element={<DashboardComponent />} />
         <Route path="/dashboard" element={<DashboardComponent />} />
         <Route path="/home" element={<DashboardComponent />} />
-        {/* <Route path="/login" element={<Login />} />  */}
+        <% if(auth == 'custom') { %>
+          <Route path="/login" element={<Login />} />
+        <% } %>
       </Routes>
     </div>
   );
