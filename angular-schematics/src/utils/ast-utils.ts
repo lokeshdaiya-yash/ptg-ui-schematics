@@ -18,12 +18,10 @@ function _angularImportsFromNode(
 ): { [name: string]: string } {
   const ms = node.moduleSpecifier;
   let modulePath: string;
-  switch (ms.kind) {
-    case ts.SyntaxKind.StringLiteral:
-      modulePath = (ms as ts.StringLiteral).text;
-      break;
-    default:
-      return {};
+  if (ms.kind === ts.SyntaxKind.StringLiteral) {
+    modulePath = (ms as ts.StringLiteral).text;
+  } else {
+    return {};
   }
 
   if (!modulePath.startsWith("@angular/")) {
@@ -39,11 +37,11 @@ function _angularImportsFromNode(
       if (nb.kind == ts.SyntaxKind.NamespaceImport) {
         // This is of the form `import * as name from 'path'`. Return `name.`.
         return {
-          [(nb as ts.NamespaceImport).name.text + "."]: modulePath,
+          [nb.name.text + "."]: modulePath,
         };
       } else {
         // This is of the form `import {a,b,c} from 'path'`
-        const namedImports = nb as ts.NamedImports;
+        const namedImports = nb;
 
         return namedImports.elements
           .map((is: ts.ImportSpecifier) =>
@@ -144,7 +142,9 @@ function _addSymbolToNgModuleMetadata(
     return [];
   }
   // Get all the children property assignment of object literals.
-  const matchingProperties: ts.ObjectLiteralElement[] = (node as ts.ObjectLiteralExpression).properties
+  const matchingProperties: ts.ObjectLiteralElement[] = (
+    node as ts.ObjectLiteralExpression
+  ).properties
     .filter((prop) => prop.kind == ts.SyntaxKind.PropertyAssignment)
     // Filter out every fields that's not "metadataField". Also handles string literals
     // (but not expressions).
@@ -152,9 +152,9 @@ function _addSymbolToNgModuleMetadata(
       const name = prop.name;
       switch (name.kind) {
         case ts.SyntaxKind.Identifier:
-          return (name as ts.Identifier).getText(source) == metadataField;
+          return name.getText(source) == metadataField;
         case ts.SyntaxKind.StringLiteral:
-          return (name as ts.StringLiteral).text == metadataField;
+          return name.text == metadataField;
       }
 
       return false;
@@ -218,7 +218,7 @@ function _addSymbolToNgModuleMetadata(
 
   const isArray = Array.isArray(node);
   if (isArray) {
-    const nodeArray = (node as {}) as Array<ts.Node>;
+    const nodeArray = node as {} as Array<ts.Node>;
     const symbolsArray = nodeArray.map((node) => node.getText());
     if (symbolsArray.includes(expression)) {
       return [];
@@ -435,8 +435,9 @@ function getListOfRoutes(
             });
 
             if (routesDeclaration) {
-              return (routesDeclaration.initializer as ts.ArrayLiteralExpression)
-                .elements;
+              return (
+                routesDeclaration.initializer as ts.ArrayLiteralExpression
+              ).elements;
             }
           }
         }
@@ -610,9 +611,9 @@ function getMatchingObjectLiteralElement(
         const name = prop.name;
         switch (name.kind) {
           case ts.SyntaxKind.Identifier:
-            return (name as ts.Identifier).getText(source) === property;
+            return name.getText(source) === property;
           case ts.SyntaxKind.StringLiteral:
-            return (name as ts.StringLiteral).text === property;
+            return name.text === property;
         }
         return false;
       })[0]

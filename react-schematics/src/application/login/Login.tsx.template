@@ -190,7 +190,7 @@ const Login = () => {
               </div>
             </div>
             <button
-              className="w-100"
+              className="w-100 mt-3 login-btn"
               onClick={handleLogin}
               tabIndex={0}
               disabled={user.disable}
