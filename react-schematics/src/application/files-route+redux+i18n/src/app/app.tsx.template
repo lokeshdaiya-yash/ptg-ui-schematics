@@ -6,7 +6,7 @@ import './translations/i18n';
 import DashboardComponent from './components/Dashboard';
 <% if (auth == 'custom') { %>import Login from './login/Login';<% } %>
 <% if (auth == 'msal') { %>
-import { useMsal } from '@azure/msal-react';
+import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
 import { loginRequest } from './login/authConfig';
 <% } %>
 export function App() {
@@ -25,6 +25,9 @@ export function App() {
     instance.loginRedirect(loginRequest).catch((e) => {
       console.error(e);
     });
+  };
+  const handleLogout = () => {
+    instance.logoutRedirect();
   };
   <% } %>
   return (
@@ -68,14 +71,19 @@ export function App() {
               </div>
 
               <% if (auth === 'custom') { %>
-                <Link to="/login" className="loginBtn headerLink">
-                  Login
-                </Link>
+              <Link to="/login" className="loginBtn headerLink">
+                LOGIN
+              </Link>
               <% } %>
               <% if (auth === 'msal') { %>
+              <AuthenticatedTemplate>
+                <button onClick={handleLogout} className="loginBtn">Logout</button>
+              </AuthenticatedTemplate>
+              <UnauthenticatedTemplate>
                 <button onClick={handleLogin} className="loginBtn">
                   LOGIN
                 </button>
+              </UnauthenticatedTemplate>
               <% } %>
               <% if (auth === 'okta') { %>
               <button className="loginBtn">LOGIN</button>
