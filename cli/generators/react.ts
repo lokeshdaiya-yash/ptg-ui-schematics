@@ -1,5 +1,6 @@
 import { execSync } from "child_process";
 import inquirer = require("inquirer");
+import { ICliOptions } from "./cli-interface";
 
 export function reactAppGenerator() {
   getArgs().then((a) => {
@@ -119,6 +120,13 @@ function getArgs() {
         type: "list",
         default: "none",
         choices: frameWorkOptions,
+      },
+      {
+        name: "Authentication",
+        message: `Would you like to add Authentication to this application?`,
+        type: "list",
+        default: "none",
+        choices: authOptions,
       },
       {
         name: "style",
