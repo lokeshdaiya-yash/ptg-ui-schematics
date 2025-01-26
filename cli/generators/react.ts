@@ -27,7 +27,7 @@ export function reactAppGenerator() {
       }
     }
 
-    execSync(`npm install @ptg-ui/react-schematics --force`, {
+    execSync(`npm link @ptg-ui/react-schematics --force`, {
       cwd: `${process.cwd()}/${a.workspace}`,
       stdio: [0, 1, 2],
     });
@@ -171,5 +171,5 @@ function addVSCodeExtensions() {
 
 export function invokeReactGenerator() {
   reactAppGenerator();
-  addVSCodeExtensions();
+  // addVSCodeExtensions();
 }

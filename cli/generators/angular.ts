@@ -9,6 +9,7 @@ import {
 } from "fs";
 import * as path from "path";
 import { dirSync } from "tmp";
+import * as inquirer from "inquirer";
 
 async function createSandbox() {
   console.log(`Creating a sandbox...`);
@@ -131,5 +132,5 @@ function cleanup(dirPath: string) {
 export async function invokeAngularGenerator() {
   const temp = await createSandbox();
   createApp(temp);
-  addVSCodeExtensions();
+  // addVSCodeExtensions();
 }
