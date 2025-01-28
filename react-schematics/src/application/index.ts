@@ -61,7 +61,6 @@ export default function (options: any): Rule {
       setReduxTpPackageJson(originalOptionsObject),
       setI18nToPackageJson(originalOptionsObject),
       originalOptionsObject.redux &&
-        originalOptionsObject.i18n &&
         addDashboardToProject(originalOptionsObject, isRootApp),
       // The mergeWith() rule merge two trees; one that's coming from a Source (a Tree with no
       // base), and the one as input to the rule. You can think of it like rebasing a Source on
@@ -127,31 +126,18 @@ export default function (options: any): Rule {
       !originalOptionsObject.routing &&
       originalOptionsObject.redux &&
       !originalOptionsObject.i18n
-        ? originalOptionsObject.framework === "material"
-          ? mergeWith(
-              apply(url("./files-mui+redux"), [
-                applyTemplates({
-                  utils: strings,
-                  ...originalOptionsObject,
-                  appName: originalOptionsObject.name,
-                  isRootApp,
-                }),
-                move(`apps/${options.name}`),
-              ]),
-              MergeStrategy.Overwrite
-            )
-          : mergeWith(
-              apply(url("./files-bootstrap+redux"), [
-                applyTemplates({
-                  utils: strings,
-                  ...originalOptionsObject,
-                  appName: originalOptionsObject.name,
-                  isRootApp,
-                }),
-                move(`apps/${options.name}`),
-              ]),
-              MergeStrategy.Overwrite
-            )
+        ? mergeWith(
+            apply(url("./files-redux"), [
+              applyTemplates({
+                utils: strings,
+                ...originalOptionsObject,
+                appName: originalOptionsObject.name,
+                isRootApp,
+              }),
+              move(`apps/${options.name}`),
+            ]),
+            MergeStrategy.Overwrite
+          )
         : noop,
       !originalOptionsObject.routing &&
       !originalOptionsObject.redux &&
@@ -291,7 +277,7 @@ export function setI18nToPackageJson(options: any): Rule {
 }
 
 export function addDashboardToProject(_options: any, isRootApp: boolean): Rule {
-  let inputUrl = "./components/";
+  const inputUrl = "./redux-i18-dashboard/";
   return mergeWith(
     apply(url(inputUrl), [
       applyTemplates({

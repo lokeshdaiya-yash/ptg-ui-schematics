@@ -1,13 +1,15 @@
-import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { NotesState } from '../store/reducer/notesReducer';
 import { addNote } from '../store/action/actions';
-
+<% if (i18n) { %>
+import { useTranslation } from 'react-i18next';
+<% } %>
 const DashboardComponent = () => {
   const [note, setNote] = useState('');
+  <% if (i18n) { %>
   const { t } = useTranslation();
-
+  <% } %>
   const updateNote = (e: any) => {
     setNote(e.target.value);
   };
@@ -36,8 +38,9 @@ const DashboardComponent = () => {
           <div className="outerRow">
             <div className="columnLeft">
               <h1>
-                {t('welcomeTest')} <br />
-                {t('welcome')}
+              <% if (i18n) { %>{t('welcomeTest')} <br />{t('welcome')}<% } %>
+              <% if (!i18n) { %>Welcome... <br />
+              to the Yash Technology Front End Code Generator Tool<% } %>
               </h1>
               <p>
                 The CLI is a powerful tool for creating, modifying, and
@@ -75,7 +78,7 @@ const DashboardComponent = () => {
                 </ol>
               </div>
             </div>
-            <div className="loginImgContainer ">
+            <div className="loginImgContainer">
               <div className="floatEnd">
                 <img src="assets/images/illustration 1.png" alt="" />
               </div>

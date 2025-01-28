@@ -97,7 +97,7 @@ export function App() {
         <Route path="/dashboard" element={<DashboardComponent />} />
         <Route path="/home" element={<DashboardComponent />} />
         <% if(auth == 'custom') { %>
-          <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <% } %>
       </Routes>
     </div>

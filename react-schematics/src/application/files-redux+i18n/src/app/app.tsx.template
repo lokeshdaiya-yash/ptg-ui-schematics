@@ -1,20 +1,35 @@
 
 import React from 'react';
-import styles from './app.module.css';
 import { useTranslation } from "react-i18next";
-import i18next, { default as i18n } from 'i18next';
+import DashboardComponent from './components/Dashboard';
+<% if (auth == 'msal') { %>
+import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
+import { loginRequest } from './login/authConfig';
+<% } %>
 import './styles.css';
 import "./translations/i18n";
 
 export function App() {
   const [langValue, setLangValue] = React.useState("en");
+  const { i18n } = useTranslation();
+  <% if (auth == 'msal') { %>
+  const { instance } = useMsal();
+  <% } %>
 
-  const { t, i18n } = useTranslation();
   const changeLanguage = (e: any ) => {
     setLangValue(e.target.value)
     i18n.changeLanguage(e.target.value);
   };
-
+  <% if (auth == 'msal') { %>
+  const handleLogin = () => {
+    instance.loginRedirect(loginRequest).catch((e) => {
+      console.error(e);
+    });
+  };
+  const handleLogout = () => {
+    instance.logoutRedirect();
+  };
+  <% } %>
   return (
     <div>
       <div className='headerContainer'>
@@ -40,8 +55,19 @@ export function App() {
                   <option value="zh">Chinese</option>
                 </select>
               </div>
-
+              <% if (auth === 'msal') { %>
+              <AuthenticatedTemplate>
+                <button onClick={handleLogout} className="loginBtn">Logout</button>
+              </AuthenticatedTemplate>
+              <UnauthenticatedTemplate>
+                <button onClick={handleLogin} className="loginBtn">
+                  LOGIN
+                </button>
+              </UnauthenticatedTemplate>
+              <% } %>
+              <% if (auth === 'okta' || auth === 'custom') { %>
               <button className="loginBtn">LOGIN</button>
+              <% }%>
             </div>
           </nav>
         </section>

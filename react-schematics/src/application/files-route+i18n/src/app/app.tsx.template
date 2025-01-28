@@ -63,7 +63,7 @@ export function App() {
                 </Routes>
               </div>
             <div className="actionContainer">
-            
+
               <div className="selectDropdown">
                 <img
                   src="assets/images/language_2x.jpg"
@@ -75,7 +75,7 @@ export function App() {
                   <option value="zh">Chinese</option>
                 </select>
               </div>
-            
+
               <button className="loginBtn">LOGIN</button>
             </div>
           </nav>
@@ -101,7 +101,7 @@ export function App() {
                 <div className='loginImgContainer '>
                   <div className="floatEnd" ><img src="assets/images/illustration 1.png" alt="" /></div>
                 </div>
- 
+
             </div>
           </section>
         </div>
