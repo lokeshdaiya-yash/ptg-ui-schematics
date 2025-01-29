@@ -60,8 +60,9 @@ export default function (options: any): Rule {
       setFramework(originalOptionsObject, isRootApp),
       setReduxTpPackageJson(originalOptionsObject),
       setI18nToPackageJson(originalOptionsObject),
-      originalOptionsObject.redux &&
-        addDashboardToProject(originalOptionsObject, isRootApp),
+      originalOptionsObject.redux
+        ? addDashboardToProject(originalOptionsObject, isRootApp)
+        : noop,
       // The mergeWith() rule merge two trees; one that's coming from a Source (a Tree with no
       // base), and the one as input to the rule. You can think of it like rebasing a Source on
       // top of your current set of changes. In this case, the Source is that apply function.
