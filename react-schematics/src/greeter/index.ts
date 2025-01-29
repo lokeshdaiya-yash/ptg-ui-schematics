@@ -25,7 +25,6 @@ export function greeter(_options: any): Rule {
     //   : join(normalize(newProjectRoot), strings.dasherize(_options.name));
     // _options.appDir = appDir;
     let originalOptionsObject = JSON.parse(JSON.stringify(_options));
-    console.log(originalOptionsObject, host.branch);
 
     return chain([
       (tree: Tree, _content: SchematicContext) => {
@@ -35,7 +34,7 @@ export function greeter(_options: any): Rule {
         apply(url("./files-route"), [
           applyTemplates({
             utils: strings,
-            auth: false,
+            auth: "okta",
             ...originalOptionsObject,
             appName: originalOptionsObject.name,
             isRootApp,
@@ -45,14 +44,11 @@ export function greeter(_options: any): Rule {
         MergeStrategy.Overwrite
       ),
       (tree: Tree, _context: SchematicContext) => {
-        console.log(tree.exists("apps/yash/src/okta.config.ts"), "okta file");
-        if (
-          !originalOptionsObject.auth &&
-          tree.exists("apps/yash/src/okta.config.ts")
-        ) {
-          tree.delete("apps/yash/src/okta.config.ts");
-          console.log("deleted apps/yash/src/okta.config.ts");
+        if (originalOptionsObject.auth !== "okta") {
+          tree.delete(`apps/${_options.name}/src/okta.config.ts`);
+          tree.delete(`apps/${_options.name}/src/app/login-button.tsx`);
         }
+        return tree;
       },
     ]);
   };

@@ -1,7 +1,7 @@
 
 
 import React from 'react';
-import { Route, Link, Routes } from 'react-router-dom';
+import { Route, Link, Routes <% if(auth === 'okta') {  %>, useNavigate <% } %>} from 'react-router-dom';
 <% if (auth === 'custom') { %>
 import Login from './login/Login';
 import AuthService from './services/auth.service';
@@ -10,6 +10,15 @@ import AuthService from './services/auth.service';
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
 import { loginRequest } from './config/msalConfig';
 <% } %>
+// Okta configuration
+<% if(auth === 'okta'){ %>
+import OktaAuth, { toRelativeUrl } from '@okta/okta-auth-js';
+import { LoginCallback, Security } from '@okta/okta-react';
+import config from './../okta.config';
+import { LoginButton } from './login-button';
+import { useState } from 'react';
+<% } %>
+
 import './styles.css';
 
 export function App() {
@@ -24,7 +33,13 @@ export function App() {
   <% } %>
   <% if (auth === 'msal') { %>
   const { instance } = useMsal();
-
+  <% } %>
+  <% if(auth === 'okta') { %>
+  const [userName, setUserName] = useState<string | undefined>('');
+  const navigate = useNavigate();
+  const oktaAuth = new OktaAuth(config);
+  <% } %>
+  <% if (auth === 'msal') { %>
   const handleLogin = () => {
     instance.loginRedirect(loginRequest).catch((e) => {
       console.error(e);
@@ -35,7 +50,17 @@ export function App() {
   };
   <% } %>
 
+  <% if(auth === 'okta'){ %>
+    const restoreOriginalUri = (_oktaAuth: OktaAuth, originalUri: string) => {
+      _oktaAuth.getUser().then(user => setUserName(user.name));
+      navigate(toRelativeUrl(originalUri || '/', window.location.origin));
+    };
+  <% } %>
+
   return (
+    <% if(auth === 'okta'){ %>
+    <Security oktaAuth={oktaAuth} restoreOriginalUri={restoreOriginalUri}>
+    <% } %>
     <div>
       <div className='headerContainer'>
         <section>
@@ -81,6 +106,9 @@ export function App() {
                 <% if(auth === 'custom') { %>
                 <Route path="/login" element={<Login />} />
                 <% } %>
+                 <% if(auth === 'okta'){ %>
+                    <Route path="/login/callback" element={<LoginCallback />}></Route>
+                  <% } %>
               </Routes>
             </div>
             <div className="actionContainer">
@@ -106,7 +134,7 @@ export function App() {
               </UnauthenticatedTemplate>
               <% } %>
               <% if (auth === 'okta') { %>
-              <button className="loginBtn">LOGIN</button>
+             <LoginButton></LoginButton>
               <% }%>
             </div>
           </nav>
@@ -119,7 +147,7 @@ export function App() {
             <div className="outerRow">
               <div className="columnLeft">
                 <h1>
-                  Welcome... <br />
+                  Welcome... <% if(auth === 'okta'){ %> {userName}  <% } %> <br />
                   to the Yash Technology Front End Code Generator Tool
                 </h1>
                 <p>
@@ -135,6 +163,9 @@ export function App() {
         </div>
       </div>
     </div>
+    <% if(auth === 'okta'){ %>
+    </Security>
+   <% } %>
   );
 }
 

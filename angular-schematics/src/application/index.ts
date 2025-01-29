@@ -289,6 +289,5 @@ export function addI18n(): Rule {
 
 function deleteKeys(inputObj: any, keysToDelete: string[]): any {
   keysToDelete.forEach((key) => delete inputObj[key]);
-  console.log(inputObj);
   return inputObj;
 }

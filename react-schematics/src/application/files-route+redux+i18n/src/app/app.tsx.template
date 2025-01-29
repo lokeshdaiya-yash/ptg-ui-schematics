@@ -1,9 +1,15 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Route, Link, Routes } from 'react-router-dom';
+import { Route, Link, Routes <% if(auth === 'okta') {  %>, useNavigate <% } %> } from 'react-router-dom';
 import './styles.css';
 import './translations/i18n';
 import DashboardComponent from './components/Dashboard';
+<% if(auth === 'okta'){ %>
+import OktaAuth, { toRelativeUrl } from '@okta/okta-auth-js';
+import { LoginCallback, Security } from '@okta/okta-react';
+import config from './../okta.config';
+import { LoginButton } from './login-button';
+<% } %>
 <% if (auth === 'custom') { %>
 import Login from './login/Login';
 import AuthService from './services/auth.service';
@@ -13,6 +19,11 @@ import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/
 import { loginRequest } from './config/msalConfig';
 <% } %>
 export function App() {
+  <% if(auth === 'okta'){ %>
+ const [userName, setUserName] = useState<string | undefined>('');
+  const navigate = useNavigate();
+  const oktaAuth = new OktaAuth(config);
+  <% } %>
   <% if (auth === 'msal') { %>
   const { instance } = useMsal();
   <% } %>
@@ -42,7 +53,16 @@ export function App() {
     instance.logoutRedirect();
   };
   <% } %>
+  <% if(auth === 'okta'){ %>
+  const restoreOriginalUri = (_oktaAuth: OktaAuth, originalUri: string) => {
+      _oktaAuth.getUser().then(user => setUserName(user.name));
+    navigate(toRelativeUrl(originalUri || '/', window.location.origin));
+  };
+<% } %>
   return (
+    <% if(auth === 'okta'){ %>
+    <Security oktaAuth={oktaAuth} restoreOriginalUri={restoreOriginalUri}>
+   <% } %>
     <div>
       <div className="headerContainer">
         <section>
@@ -104,7 +124,7 @@ export function App() {
               </UnauthenticatedTemplate>
               <% } %>
               <% if (auth === 'okta') { %>
-              <button className="loginBtn">LOGIN</button>
+              <LoginButton></LoginButton>
               <% }%>
             </div>
           </nav>
@@ -117,8 +137,14 @@ export function App() {
         <% if(auth === 'custom') { %>
         <Route path="/login" element={<Login />} />
         <% } %>
+        <% if(auth === 'okta'){ %>
+            <Route path="/login/callback" element={<LoginCallback />}></Route>
+        <% } %>
       </Routes>
     </div>
+    <% if(auth === 'okta'){ %>
+    </Security>
+   <% } %>
   );
 }
 

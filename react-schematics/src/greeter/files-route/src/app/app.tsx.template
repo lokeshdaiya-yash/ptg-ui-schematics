@@ -14,10 +14,11 @@ import './styles.css';
 
 export function App() {
 <% if(auth === 'okta'){ %>
- const [userName, setUserName] = useState<string | undefined>(null);
+ const [userName, setUserName] = useState<string | undefined>('');
   const navigate = useNavigate();
   const oktaAuth = new OktaAuth(config);
-  
+  <% } %>
+  <% if(auth === 'okta'){ %>
   const restoreOriginalUri = (_oktaAuth: OktaAuth, originalUri: string) => {
       _oktaAuth.getUser().then(user => setUserName(user.name));
     navigate(toRelativeUrl(originalUri || '/', window.location.origin));
