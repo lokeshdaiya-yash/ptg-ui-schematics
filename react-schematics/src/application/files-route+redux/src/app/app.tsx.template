@@ -60,6 +60,14 @@ export function App() {
                 style={{ height: 50, width: 84 }}
               />
             </a>
+            <div>
+              <Link to="/dashboard" className="headerLink">
+                Dashboard
+              </Link>
+              <Link to="/home" className="headerLink">
+                Home
+              </Link>
+            </div>
             <div className="actionContainer">
               <% if (auth === 'custom') { %>
               <Link to="/login" className="loginBtn headerLink">

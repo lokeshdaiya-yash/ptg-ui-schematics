@@ -1,17 +1,31 @@
-
 import React from 'react';
-import styles from './app.module.css';
-import { Container, Row, Col } from 'react-bootstrap';
-import { useTranslation, Trans } from "react-i18next";
-import i18next, { default as i18n } from 'i18next';
+import { useTranslation } from "react-i18next";
+import DashboardComponent from './components/Dashboard';
 import { Route, Link, Routes } from 'react-router-dom';
 import './styles.css';
 import "./translations/i18n";
+<% if (auth == 'custom') { %>import Login from './login/Login';<% } %>
+<% if (auth == 'msal') { %>
+import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
+import { loginRequest } from './login/authConfig';
+<% } %>
 
 export function App() {
   const [langValue, setLangValue] = React.useState("en");
+  const { i18n } = useTranslation();
+  <% if (auth == 'msal') { %>
+  const { instance } = useMsal();
 
-  const { t, i18n } = useTranslation();
+  const handleLogin = () => {
+    instance.loginRedirect(loginRequest).catch((e) => {
+      console.error(e);
+    });
+  };
+  const handleLogout = () => {
+    instance.logoutRedirect();
+  };
+  <% } %>
+
   const changeLanguage = (e: any ) => {
     setLangValue(e.target.value)
     i18n.changeLanguage(e.target.value);
@@ -29,41 +43,15 @@ export function App() {
                 style={{ height: 50, width: 84 }}
               />
             </a>
-              <div>
-                <Routes>
-                  <Route
-                    path="/"
-                    element={
-                      <>
-                        <Link to="/dashboard" className="headerLink">
-                          Dashboard
-                        </Link>
-                        <Link to="/home" className="headerLink">
-                          Home
-                        </Link>
-                      </>
-                    }
-                  />
-                  <Route
-                    path="/dashboard"
-                    element={
-                        <Link to="/home" className="headerLink">
-                          Home
-                        </Link>
-                    }
-                  />
-                  <Route
-                    path="/home"
-                    element={
-                        <Link to="/dashboard" className="headerLink">
-                          Dashboard
-                        </Link>
-                    }
-                  />
-                </Routes>
-              </div>
+            <div>
+              <Link to="/dashboard" className="headerLink">
+                Dashboard
+              </Link>
+              <Link to="/home" className="headerLink">
+                Home
+              </Link>
+            </div>
             <div className="actionContainer">
-
               <div className="selectDropdown">
                 <img
                   src="assets/images/language_2x.jpg"
@@ -75,37 +63,35 @@ export function App() {
                   <option value="zh">Chinese</option>
                 </select>
               </div>
-
+              <% if (auth === 'custom') { %>
+              <Link to="/login" className="loginBtn headerLink">
+                LOGIN
+              </Link>
+              <% } %>
+              <% if (auth === 'msal') { %>
+              <AuthenticatedTemplate>
+                <button onClick={handleLogout} className="loginBtn">Logout</button>
+              </AuthenticatedTemplate>
+              <UnauthenticatedTemplate>
+                <button onClick={handleLogin} className="loginBtn">
+                  LOGIN
+                </button>
+              </UnauthenticatedTemplate>
+              <% } %>
+              <% if (auth === 'okta') { %>
               <button className="loginBtn">LOGIN</button>
+              <% }%>
             </div>
           </nav>
         </section>
       </div>
 
-
-
-      <div className="loginContainer">
-        <div className='innerContainer'>
-          <section className="sectionContainer">
-            <div className="outerRow">
-              <div className="columnLeft">
-                <h1>
-                  {t("welcomeTest")} <br />
-                  {t("welcome")}
-                </h1>
-                <p>
-                The CLI is a powerful tool for creating, modifying, and maintaining any software project, and is particularly useful for customizing our UI projects. We can use this CLI to enforce architectural rules and conventions, making our projects consistent and inter-operative.
-                </p>
-
-              </div>
-                <div className='loginImgContainer '>
-                  <div className="floatEnd" ><img src="assets/images/illustration 1.png" alt="" /></div>
-                </div>
-
-            </div>
-          </section>
-        </div>
-      </div>
+      <Routes>
+        <Route path="/" element={<DashboardComponent />} />
+        <Route path="/dashboard" element={<DashboardComponent />} />
+        <Route path="/home" element={<DashboardComponent />} />
+        <% if(auth == 'custom') { %><Route path="/login" element={<Login />} /><% } %>
+      </Routes>
     </div>
   );
 }

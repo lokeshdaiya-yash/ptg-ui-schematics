@@ -1,0 +1,31 @@
+import { useTranslation } from 'react-i18next';
+
+const DashboardComponent = () => {
+  const { t } = useTranslation();
+
+  return (
+    <div className="loginContainer">
+      <div className='innerContainer'>
+        <section className="sectionContainer">
+          <div className="outerRow">
+            <div className="columnLeft">
+              <h1>
+                {t("welcomeTest")} <br />
+                {t("welcome")}
+              </h1>
+              <p>
+              The CLI is a powerful tool for creating, modifying, and maintaining any software project, and is particularly useful for customizing our UI projects. We can use this CLI to enforce architectural rules and conventions, making our projects consistent and inter-operative.
+              </p>
+
+            </div>
+              <div className='loginImgContainer '>
+                <div className="floatEnd" ><img src="assets/images/illustration 1.png" alt="" /></div>
+              </div>
+
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+};
+export default DashboardComponent;
