@@ -6,7 +6,7 @@ import './styles.css';
 <% if (auth == 'custom') { %>import Login from './login/Login';<% } %>
 <% if (auth == 'msal') { %>
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
-import { loginRequest } from './login/authConfig';
+import { loginRequest } from './config/msalConfig';
 <% } %>
 
 export function App() {

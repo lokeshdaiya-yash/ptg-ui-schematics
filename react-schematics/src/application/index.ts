@@ -229,11 +229,25 @@ export function setFramework(options: any, isRootApp: boolean) {
     tasks.push(addMaterialToPackageJson());
   }
   if (options.auth === "custom") {
-    tasks.push(addLoginToProject(options, isRootApp, "./login/"));
+    tasks.push(
+      addLoginToProject(
+        options,
+        isRootApp,
+        "./login/",
+        `apps/${options.name}/src/app/login/`
+      )
+    );
     tasks.push(addAuthServiceToProject(options, isRootApp));
   }
   if (options.auth === "msal") {
-    tasks.push(addLoginToProject(options, isRootApp, "./msal/"));
+    tasks.push(
+      addLoginToProject(
+        options,
+        isRootApp,
+        "./msal/",
+        `apps/${options.name}/src/app/config/`
+      )
+    );
   }
   if (options.framework === "bootstrap") {
     tasks.push(addBootstrapToPackageJson());
@@ -296,7 +310,8 @@ export function addDashboardToProject(_options: any, isRootApp: boolean): Rule {
 export function addLoginToProject(
   _options: any,
   isRootApp: boolean,
-  inputUrl: string
+  inputUrl: string,
+  outputPath: string
 ): Rule {
   return mergeWith(
     apply(url(inputUrl), [
@@ -306,7 +321,7 @@ export function addLoginToProject(
         appName: "components",
         isRootApp,
       }),
-      move(`apps/${_options.name}/src/app/login/`),
+      move(outputPath),
     ]),
     MergeStrategy.Overwrite
   );

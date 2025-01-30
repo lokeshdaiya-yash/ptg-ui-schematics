@@ -3,7 +3,7 @@ import styles from './app.module.css';
 import DashboardComponent from './components/Dashboard';
 <% if (auth == 'msal') { %>
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
-import { loginRequest } from './login/authConfig';
+import { loginRequest } from './config/msalConfig';
 <% } %>
 import './styles.css';
 
@@ -20,7 +20,6 @@ export function App() {
     instance.logoutRedirect();
   };
   <% } %>
-
   return (
     <div>
       <div className='headerContainer'>

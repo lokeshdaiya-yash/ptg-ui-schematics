@@ -5,7 +5,7 @@ import { useTranslation, Trans } from "react-i18next";
 import i18next, { default as i18n } from 'i18next';
 <% if (auth == 'msal') { %>
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
-import { loginRequest } from './login/authConfig';
+import { loginRequest } from './config/msalConfig';
 <% } %>
 import './styles.css';
 import "./translations/i18n";

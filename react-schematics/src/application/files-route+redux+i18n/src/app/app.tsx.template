@@ -7,7 +7,7 @@ import DashboardComponent from './components/Dashboard';
 <% if (auth == 'custom') { %>import Login from './login/Login';<% } %>
 <% if (auth == 'msal') { %>
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
-import { loginRequest } from './login/authConfig';
+import { loginRequest } from './config/msalConfig';
 <% } %>
 export function App() {
   <% if (auth == 'msal') { %>

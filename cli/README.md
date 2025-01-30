@@ -37,7 +37,7 @@ After publishing
 - Complete the registration form with the following details:
   - Name: Your lication name.
   - Supported account types: Choose the appropriate option based on your needs.
-  - Redirect URI: Set it to `http://localhost:3000` (or another URL based on your environment).
+  - Redirect URI: Set it to `http://localhost:4200` (or another URL based on your environment).
 - Click **Register**
 
-> After registering your application in Azure AD, make sure to copy the Client ID, Tenant ID, and redirect URI. Then, paste these values into the `authConfig.js` file located in **src>app>login>authConfig.js**
+> After registering your application in Azure AD, make sure to copy the Client ID, Tenant ID, and redirect URI. Then, paste these values into the `msalConfig.js` file located in **src>app>login>authConfig.js**
