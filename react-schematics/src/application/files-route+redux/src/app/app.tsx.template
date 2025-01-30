@@ -23,8 +23,8 @@ export function App() {
  const [userName, setUserName] = useState<string | undefined>('');
   const navigate = useNavigate();
   const oktaAuth = new OktaAuth(config);
-
 <% } %>
+
    <% if (auth == 'msal') { %>
   const { instance } = useMsal();
 
