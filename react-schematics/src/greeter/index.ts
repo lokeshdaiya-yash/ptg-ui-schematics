@@ -25,7 +25,7 @@ export function greeter(_options: any): Rule {
     //   : join(normalize(newProjectRoot), strings.dasherize(_options.name));
     // _options.appDir = appDir;
     let originalOptionsObject = JSON.parse(JSON.stringify(_options));
-
+    console.log(host);
     return chain([
       (tree: Tree, _content: SchematicContext) => {
         console.log("tree in chain", tree.branch);
@@ -43,11 +43,15 @@ export function greeter(_options: any): Rule {
         ]),
         MergeStrategy.Overwrite
       ),
+      mergeWith(
+        apply(url("./okta/"), [
+          applyTemplates({}),
+          move(`apps/${_options.name}/src/app/okta/`),
+        ]),
+        MergeStrategy.Overwrite
+      ),
       (tree: Tree, _context: SchematicContext) => {
-        if (originalOptionsObject.auth !== "okta") {
-          tree.delete(`apps/${_options.name}/src/okta.config.ts`);
-          tree.delete(`apps/${_options.name}/src/app/login-button.tsx`);
-        }
+        console.log(tree);
         return tree;
       },
     ]);
