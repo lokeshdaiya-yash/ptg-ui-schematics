@@ -51,7 +51,6 @@ export function greeter(_options: any): Rule {
         MergeStrategy.Overwrite
       ),
       (tree: Tree, _context: SchematicContext) => {
-        console.log(tree);
         return tree;
       },
     ]);
