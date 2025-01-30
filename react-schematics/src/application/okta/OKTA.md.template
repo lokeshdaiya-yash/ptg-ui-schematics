@@ -8,10 +8,12 @@ ptg-ui-cli
 
 `Would you like to add Authentication to this application?` => `okta`
 
-2. Configure Okta Client, here all changes related to will automatically get added following config in `okta.config.ts` file.
+2. Make sure that you have enabled routing for the this project. Without routing it wont work
 
-   1. yourOktaDomain - okta domain
-   2. clientId - clientId from okta application
+3. Configure Okta Client, here all changes related to will automatically get added following config in `okta.config.ts` file.
+
+   4. yourOktaDomain - okta domain
+   5. clientId - clientId from okta application
 
 Example: `okta.config.ts`
 const ISSUER=https://{yourOktaDomain}/oauth2/default
