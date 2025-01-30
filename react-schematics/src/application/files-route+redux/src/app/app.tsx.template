@@ -1,5 +1,3 @@
-
-import styles from './app.module.css';
 import DashboardComponent from './components/Dashboard';
 import { Route, Link, Routes <% if(auth === 'okta') {  %>, useNavigate <% } %>} from 'react-router-dom';
 import './styles.css';
@@ -11,8 +9,6 @@ import AuthService from './services/auth.service';
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
 import { loginRequest } from './config/msalConfig';
 <% } %>
-
-
 <% if(auth === 'okta'){ %>
 import OktaAuth, { toRelativeUrl } from '@okta/okta-auth-js';
 import { LoginCallback, Security } from '@okta/okta-react';
@@ -35,9 +31,8 @@ export function App() {
   const [userName, setUserName] = useState<string | undefined>('');
   const navigate = useNavigate();
   const oktaAuth = new OktaAuth(config);
-
   <% } %>
-  <% if (auth == 'msal') { %>
+  <% if (auth === 'msal') { %>
   const { instance } = useMsal();
 
   const handleLogin = () => {
