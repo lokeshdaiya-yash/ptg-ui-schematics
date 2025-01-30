@@ -17,13 +17,23 @@ export function reactAppGenerator() {
         stdio: [0, 1, 2],
       }
     );
+
+    if (a.auth) {
+      if (a.auth === "msal") {
+        execSync(`npm i @azure/msal-react @azure/msal-browser`, {
+          cwd: `${process.cwd()}/${a.workspace}`,
+          stdio: [0, 1, 2],
+        });
+      }
+    }
+
     execSync(`npm install @ptg-ui/react-schematics --force`, {
       cwd: `${process.cwd()}/${a.workspace}`,
       stdio: [0, 1, 2],
     });
 
     execSync(
-      `nx generate @ptg-ui/react-schematics:application --name ${a.name} --style ${a.style} --framework ${a.framework} --routing ${a.routing} --redux ${a.redux} --i18n ${a.i18n}`,
+      `nx generate @ptg-ui/react-schematics:application --name ${a.name} --style ${a.style} --framework ${a.framework} --routing ${a.routing} --redux ${a.redux} --i18n ${a.i18n} --auth ${a.auth}`,
       {
         cwd: `${process.cwd()}/${a.workspace}`,
         stdio: [0, 1, 2],
@@ -72,6 +82,20 @@ function getArgs() {
       label: "LESS",
     },
   ];
+  const authOptions: { value: string; label: string }[] = [
+    {
+      value: "custom",
+      label: "Custom",
+    },
+    {
+      value: "msal",
+      label: "Msal",
+    },
+    {
+      value: "okta",
+      label: "Okta",
+    },
+  ];
   return inquirer
     .prompt([
       {
@@ -97,6 +121,13 @@ function getArgs() {
         type: "list",
         default: "css",
         choices: styleOptions,
+      },
+      {
+        name: "auth",
+        message: "Which login authentication would you like to use?",
+        type: "list",
+        default: "custom",
+        choices: authOptions,
       },
       {
         name: "routing",

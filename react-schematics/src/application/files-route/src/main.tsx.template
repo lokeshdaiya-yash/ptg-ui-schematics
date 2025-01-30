@@ -1,5 +1,6 @@
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
 import App from './app/app';
 <% if (auth == 'msal') { %>
 import { MsalProvider } from '@azure/msal-react';
@@ -16,14 +17,14 @@ initializeMSAL().then(() => {
 <% }%>
 ReactDOM.render(
   <StrictMode>
-    <% if (auth == 'msal') { %>
-      <MsalProvider instance={msalInstance}>
-        <App />
-      </MsalProvider>
-      <% } %>
-      <% if (auth !== 'msal') { %>
+    <BrowserRouter>
+      <% if (auth == 'msal') { %>
+    <MsalProvider instance={msalInstance}>
       <App />
-      <% } %>
+    </MsalProvider>
+    <% } %>
+    <% if (auth !== 'msal') { %><App /><% } %>
+    </BrowserRouter>
   </StrictMode>,
   document.getElementById('root')
 );

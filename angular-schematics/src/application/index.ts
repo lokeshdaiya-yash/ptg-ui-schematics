@@ -25,28 +25,22 @@ import { addImportToAppModule, insertStatement } from "../utils/utils";
 // per file.
 export function application(options: any): Rule {
   return async (host: Tree, _context: SchematicContext) => {
-    // console.log(tree);
-
     const workspace = await getWorkspace(host);
     const newProjectRoot =
-      (workspace.extensions.newProjectRoot as string | undefined) || "";
+      (workspace.extensions.newProjectRoot as string | undefined) ?? "";
     const isRootApp = options.projectRoot !== undefined;
     const appDir = isRootApp
       ? normalize(options.projectRoot || "")
       : join(normalize(newProjectRoot), strings.dasherize(options.name));
     options.appDir = appDir;
-    // const sourceDir = `${appDir}/src/app`;
 
-     var originalOptionsObject=JSON.parse(JSON.stringify(options));
-    // console.log('originalOptionsObject::'+JSON.stringify(originalOptionsObject));
-     const keysToDelete=['framework','ngrx','i18n','appDir'];
+    let originalOptionsObject = JSON.parse(JSON.stringify(options));
+    const keysToDelete = ["framework", "ngrx", "i18n", "appDir"];
     /*--get schema compatible with application schema---*/
-     let inputToApplicationSchema=deleteKeys(options,keysToDelete);
-     //console.log('modified::'+JSON.stringify(inputToApplicationSchema));
+    let inputToApplicationSchema = deleteKeys(options, keysToDelete);
 
     return chain([
-      
-    externalSchematic("@schematics/angular", "application", {
+      externalSchematic("@schematics/angular", "application", {
         ...inputToApplicationSchema,
         style: "scss",
         skipInstall: true,
@@ -82,7 +76,12 @@ export function application(options: any): Rule {
           )
         : noop,
       addDevdependenciesToPackageJSON(),
-      setFramework(originalOptionsObject,isRootApp,appDir,originalOptionsObject.i18n),
+      setFramework(
+        originalOptionsObject,
+        isRootApp,
+        appDir,
+        originalOptionsObject.i18n
+      ),
       setNGRX(originalOptionsObject),
 
       formatFiles(),
@@ -90,17 +89,23 @@ export function application(options: any): Rule {
   };
 }
 
-export function addDevdependenciesToPackageJSON(){
-  return chain([addDepsToPackageJson(
-    {},
-    {
-      "@types/node": "^12.11.1"
-    }
-  )])
+export function addDevdependenciesToPackageJSON() {
+  return chain([
+    addDepsToPackageJson(
+      {},
+      {
+        "@types/node": "^12.11.1",
+      }
+    ),
+  ]);
 }
 
-export function setFramework(_options: any,isRootApp: boolean,appDir: string,isI18nSeleted:boolean): Rule {
-  
+export function setFramework(
+  _options: any,
+  isRootApp: boolean,
+  appDir: string,
+  isI18nSeleted: boolean
+): Rule {
   if (_options.framework === "material") {
     return chain([addMaterialToPackageJson(), updateStyles(_options)]);
   }
@@ -110,7 +115,11 @@ export function setFramework(_options: any,isRootApp: boolean,appDir: string,isI
   }
 
   if (_options.framework === "tailwind") {
-    return chain([addTailwindToPackageJson(), updateStyles(_options),createTailwindConfig(_options,isRootApp,appDir,isI18nSeleted)]);
+    return chain([
+      addTailwindToPackageJson(),
+      updateStyles(_options),
+      createTailwindConfig(_options, isRootApp, appDir, isI18nSeleted),
+    ]);
   }
 
   return noop;
@@ -138,8 +147,7 @@ export function setNGRX(_options: any): Rule {
         "@nrwl/angular": "~14.7.0",
         "@nrwl/workspace": "~14.7.0",
       },
-      {
-      }
+      {}
     ),
   ]);
 }
@@ -167,7 +175,7 @@ export function addBootstrapToPackageJson(): Rule {
 export function addTailwindToPackageJson(): Rule {
   return addDepsToPackageJson(
     {
-      "tailwindcss": "^2.2.0"
+      tailwindcss: "^2.2.0",
     },
     {},
     false
@@ -180,7 +188,7 @@ export function updateStyles(options: any) {
     @import './app/app.theme';
 
     @include app-theme();
-    
+
   `;
     if (options.framework === "material") {
       content = `
@@ -192,17 +200,17 @@ export function updateStyles(options: any) {
       margin: 0;
       font-family: Roboto, "Helvetica Neue", sans-serif;
     }
-    ${content} 
+    ${content}
     `;
     }
     if (options.framework === "bootstrap") {
-      content = ` 
+      content = `
     @import "~bootstrap/dist/css/bootstrap.css";
     ${content}
     `;
     }
     if (options.framework === "tailwind") {
-      content = ` 
+      content = `
       @import 'tailwindcss/base';
       @import 'tailwindcss/components';
       @import 'tailwindcss/utilities';
@@ -214,9 +222,16 @@ export function updateStyles(options: any) {
   };
 }
 
-export function createTailwindConfig(_options:any,isRootApp: boolean,appDir: string,isI18nSeleted:boolean): Rule {
- let inputUrl=isI18nSeleted?"./tailwind-files/tailwind+i18n-files/":"./tailwind-files/tailwind-i18n-files/";
- return mergeWith(
+export function createTailwindConfig(
+  _options: any,
+  isRootApp: boolean,
+  appDir: string,
+  isI18nSeleted: boolean
+): Rule {
+  let inputUrl = isI18nSeleted
+    ? "./tailwind-files/tailwind+i18n-files/"
+    : "./tailwind-files/tailwind-i18n-files/";
+  return mergeWith(
     apply(url(inputUrl), [
       applyTemplates({
         utils: strings,
@@ -227,8 +242,7 @@ export function createTailwindConfig(_options:any,isRootApp: boolean,appDir: str
       move(appDir),
     ]),
     MergeStrategy.Overwrite
-  )
-      
+  );
 }
 
 export function addI18n(): Rule {
@@ -273,9 +287,8 @@ export function addI18n(): Rule {
   ]);
 }
 
- function deleteKeys(inputObj:any,keysToDelete: string[]): any
-{
-  keysToDelete.forEach(key => delete inputObj[key]);
+function deleteKeys(inputObj: any, keysToDelete: string[]): any {
+  keysToDelete.forEach((key) => delete inputObj[key]);
   console.log(inputObj);
   return inputObj;
 }
