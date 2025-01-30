@@ -219,6 +219,15 @@ export default function (options: any): Rule {
             MergeStrategy.Overwrite
           )
         : noop,
+      originalOptionsObject.auth === "okta"
+        ? mergeWith(
+            apply(url("./okta/"), [
+              applyTemplates({}),
+              move(`apps/${options.name}/src/app/okta/`),
+            ]),
+            MergeStrategy.Overwrite
+          )
+        : noop,
       (tree: Tree, _context: SchematicContext) => {
         if (originalOptionsObject.auth !== "okta") {
           tree.delete(`apps/${options.name}/src/okta.config.ts`);

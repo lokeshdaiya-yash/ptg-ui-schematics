@@ -16,6 +16,27 @@ schematics --help
 
 `npm run test` will run the unit tests, using Jasmine as a runner and test framework.
 
+### Okta Integration
+
+1. Answer the following question with okta while running
+
+```bash
+ptg-ui-cli
+```
+
+`Would you like to add Authentication to this application?` => `okta`
+
+2. Configure Okta Client, here all changes related to will automatically get added following config in `okta.config.ts` file.
+
+   1. yourOktaDomain - okta domain
+   2. clientId - clientId from okta application
+
+Example: `okta.config.ts`
+const ISSUER=https://{yourOktaDomain}/oauth2/default
+const CLIENT_ID={clientId}
+
+3. After serving application click on login it will redirect you to okta login page if configuration are valid
+
 ### Publishing
 
 To publish, simply do:

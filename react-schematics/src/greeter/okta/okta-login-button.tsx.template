@@ -1,6 +1,6 @@
 import { useOktaAuth } from "@okta/okta-react"
 
-export function LoginButton() {
+export function OktaLoginButton() {
     const { oktaAuth, authState } = useOktaAuth();
     const signin = async () => await oktaAuth.signInWithRedirect();
     const signout = async () => await oktaAuth.signOut();

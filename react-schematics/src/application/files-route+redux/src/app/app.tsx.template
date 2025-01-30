@@ -13,8 +13,8 @@ import { loginRequest } from './login/authConfig';
 <% if(auth === 'okta'){ %>
 import OktaAuth, { toRelativeUrl } from '@okta/okta-auth-js';
 import { LoginCallback, Security } from '@okta/okta-react';
-import config from './../okta.config';
-import { LoginButton } from './login-button';
+import config from './../okta/okta.config';
+import { OktaLoginButton } from './../okta/okta-login-button';
 import { useState } from 'react';
 <% } %>
 
@@ -77,7 +77,7 @@ export function App() {
               </UnauthenticatedTemplate>
               <% } %>
               <% if (auth === 'okta') { %>
-             <LoginButton></LoginButton>
+             <OktaLoginButton></OktaLoginButton>
               <% }%>
             </div>
           </nav>
