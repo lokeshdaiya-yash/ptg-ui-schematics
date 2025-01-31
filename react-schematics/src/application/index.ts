@@ -229,13 +229,13 @@ export default function (options: any): Rule {
             MergeStrategy.Overwrite
           )
         : noop,
-      (tree: Tree, _context: SchematicContext) => {
-        if (originalOptionsObject.auth !== "okta") {
-          tree.delete(`apps/${options.name}/src/okta.config.ts`);
-          tree.delete(`apps/${options.name}/src/app/login-button.tsx`);
-        }
-        return tree;
-      },
+      mergeWith(
+        apply(url("./environments/"), [
+          applyTemplates({ ...originalOptionsObject }),
+          move(`apps/${options.name}/src/environments/`),
+        ]),
+        MergeStrategy.Overwrite
+      ),
     ]);
   };
 }
