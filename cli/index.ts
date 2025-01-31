@@ -21,7 +21,7 @@ function invokeCli(appType: string) {
       break;
     case "react":
       invokeReactGenerator();
-    break;
+      break;
     default:
       console.log(`${appType} generator is under development`);
       break;
@@ -57,14 +57,3 @@ function getArgs() {
       return a.ApplicationType;
     });
 }
-
-// const command = `ng new --collection=@ptg/angular/src/collection.json --strict false`;
-// console.log(command);
-// console.log("current directory", process.cwd());
-
-// execSync(`${command}`, {
-//   stdio: [0, 1, 2],
-//   cwd: process.cwd(),
-// });
-
-// TODO : implement i18n
