@@ -7,8 +7,8 @@ import DashboardComponent from './components/Dashboard';
 <% if(auth === 'okta'){ %>
 import OktaAuth, { toRelativeUrl } from '@okta/okta-auth-js';
 import { LoginCallback, Security } from '@okta/okta-react';
-import config from './../okta/okta.config';
-import { OktaLoginButton } from './../okta/okta-login-button';
+import config from './okta/okta.config';
+import { OktaLoginButton } from './okta/okta-login-button';
 <% } %>
 <% if (auth === 'custom') { %>
 import Login from './login/Login';

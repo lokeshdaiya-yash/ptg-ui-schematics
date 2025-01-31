@@ -50,8 +50,18 @@ export function greeter(_options: any): Rule {
         ]),
         MergeStrategy.Overwrite
       ),
-      (tree: Tree, _context: SchematicContext) => {
-        return tree;
+      mergeWith(
+        apply(url("./environments/"), [
+          applyTemplates({ ...originalOptionsObject }),
+          move(`apps/${_options.name}/src/environments/`),
+        ])
+      ),
+      (_tree: Tree, _content: SchematicContext) => {
+        console.log(
+          _tree
+            .read("apps/yash/src/environments/environment.ts")
+            ?.toString("utf-8")
+        );
       },
     ]);
   };

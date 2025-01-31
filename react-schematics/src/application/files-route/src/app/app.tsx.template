@@ -14,8 +14,8 @@ import { loginRequest } from './config/msalConfig';
 <% if(auth === 'okta'){ %>
 import OktaAuth, { toRelativeUrl } from '@okta/okta-auth-js';
 import { LoginCallback, Security } from '@okta/okta-react';
-import config from './../okta/okta.config';
-import { OktaLoginButton } from './../okta/okta.login-button';
+import config from './okta/okta.config';
+import { OktaLoginButton } from './okta/okta.login-button';
 import { useState } from 'react';
 <% } %>
 

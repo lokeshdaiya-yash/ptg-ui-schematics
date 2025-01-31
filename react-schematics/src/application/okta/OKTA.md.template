@@ -10,13 +10,10 @@ ptg-ui-cli
 
 2. Make sure that you have enabled routing for the this project. Without routing it wont work
 
-3. Configure Okta Client, here all changes related to will automatically get added following config in `okta.config.ts` file.
+3. Configure Okta Client, here all changes related to will automatically get added in to the project 
+Please update following properties in environments file.
 
    4. yourOktaDomain - okta domain
    5. clientId - clientId from okta application
-
-Example: `okta.config.ts`
-const ISSUER=https://{yourOktaDomain}/oauth2/default
-const CLIENT_ID={clientId}
 
 3. After serving application click on login it will redirect you to okta login page if configuration are valid

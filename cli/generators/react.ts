@@ -31,26 +31,25 @@ export function reactAppGenerator() {
       }
     );
 
+    const npmPkgs = [];
     if (a.auth) {
       if (a.auth === "msal") {
-        execSync(`npm i @azure/msal-react @azure/msal-browser`, {
-          cwd: `${process.cwd()}/${a.workspace}`,
-          stdio: [0, 1, 2],
-        });
+        npmPkgs.push("@azure/msal-react");
+        npmPkgs.push("@azure/msal-browser");
       } else if (a.auth === "okta") {
-        execSync("npm i @okta/okta-auth-js @okta/okta-react", {
-          cwd: `${process.cwd()}/${a.workspace}`,
-          stdio: [0, 1, 2],
-        });
+        npmPkgs.push("@okta/okta-auth-js");
+        npmPkgs.push("@okta/okta-react");
       }
     }
 
     if (a.routing) {
-      execSync(`npm install --f react-router-dom@6.28.0`, {
-        cwd: `${process.cwd()}/${a.workspace}`,
-        stdio: [0, 1, 2],
-      });
+      npmPkgs.push("react-router-dom@6.28.0");
     }
+    console.log(npmPkgs.join(" "));
+    execSync(`npm install --f ${npmPkgs.join(" ")}`, {
+      cwd: `${process.cwd()}/${a.workspace}`,
+      stdio: [0, 1, 2],
+    });
   });
 }
 
@@ -176,5 +175,5 @@ function addVSCodeExtensions() {
 
 export function invokeReactGenerator() {
   reactAppGenerator();
-  // addVSCodeExtensions();
+  addVSCodeExtensions();
 }
