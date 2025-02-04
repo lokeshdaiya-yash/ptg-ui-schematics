@@ -1,6 +1,6 @@
 .login-wrapper {
   width: 100vw;
-  height: 90vh;
+  height: 100vh;
   background: #eef2f6;
   overflow: hidden;
 
@@ -13,11 +13,23 @@
         width: 80%;
       }
     }
+    .signup-btn,
+    .forgot-password {
+      font-size: 0.875rem;
+      color: #eef2f6;
+      text-decoration: none;
+      cursor: pointer;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
 
     .input-group {
-      input {
-        border-radius: 2px;
-        padding-left: 40px;
+      ::ng-deep {
+        input {
+          border-radius: 2px;
+          padding-left: 40px;
+        }
       }
     }
 
@@ -35,15 +47,42 @@
       width: 17px;
       height: 23px;
       display: block;
-      background-size: 100% !important;
-      background-position: center center !important;
-      background-repeat: no-repeat !important;
+      background-size: 100%;
+      background-position: center center;
+      background-repeat: no-repeat;
     }
-
     .login-btn {
       padding: 6px 12px;
     }
   }
+
+  .form-control {
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    appearance: none;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+
+  .w-100 {
+    width: 100%;
+  }
+
+  .mt-3 {
+    margin-top: 1rem;
+  }
+}
+
+.mb-4 {
+  margin-bottom: 1.5rem;
 }
 
 .login-logo {

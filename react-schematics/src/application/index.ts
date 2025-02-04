@@ -248,6 +248,7 @@ export function setFramework(options: any, isRootApp: boolean) {
         `apps/${options.name}/src/app/config/`
       )
     );
+    tasks.push(addLoginToProject(options, isRootApp, "./documentation/", `/`));
   }
   if (options.framework === "bootstrap") {
     tasks.push(addBootstrapToPackageJson());
