@@ -3,32 +3,128 @@
   "$id": "MyFullSchematicsSchema",
   "title": "Application Schema",
   "type": "object",
+  "description": "Print a personalized greet message",
   "properties": {
     "index": {
       "type": "number",
       "default": 1
     },
     "name": {
-      "type": "string"
+      "type": "string",
+      "description": "Name of the person you want to greet",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
     },
     "style": {
-      "type": "string"
+      "type": "string",
+      "default": "css",
+      "description": "Style ",
+      "x-prompt": {
+        "message": "Which stylesheet format would you like to use?",
+        "type": "list",
+        "items": [
+          {
+            "value": "css",
+            "label": "CSS"
+          },
+          {
+            "value": "scss",
+            "label": "SASS(.scss)"
+          },
+          {
+            "value": "styl",
+            "label": "Stylus(.styl)"
+          },
+          {
+            "value": "less",
+            "label": "LESS"
+          }
+        ]
+      }
     },
     "framework": {
-      "type": "string"
+      "type": "string",
+      "default": "none",
+      "description": "",
+      "x-prompt": {
+        "message": "Which framework would you like to use?",
+        "type": "list",
+        "items": [
+          {
+            "value": "none",
+            "label": "None"
+          },
+          {
+            "value": "material",
+            "label": "Material"
+          },
+          {
+            "value": "bootstrap",
+            "label": "Bootstrap"
+          }
+        ]
+      }
     },
     "routing": {
-      "type": "boolean"
-    },
-    "redux": {
-      "type": "boolean"
-    },
-    "i18n": {
-      "type": "boolean"
+      "type": "boolean",
+      "default": false,
+      "description": "Add routing to the application",
+      "x-prompt": {
+        "message": "Would you like to add routing to the application?",
+        "type": "confirmation"
+      }
     },
     "auth": {
-      "type": "string"
+      "type": "string",
+      "description": "Authentication provide for application login",
+      "default": "custom",
+      "x-prompt": {
+        "message": "Which Authentication would you like to add to this application?",
+        "type": "list",
+        "items": [
+          {
+            "label": "Msl",
+            "value": "msl"
+          },
+          {
+            "label": "Okta",
+            "value": "okta"
+          },
+          {
+            "label": "Custom",
+            "value": "custom"
+          }
+        ]
+      }
+    },
+    "redux": {
+      "type": "boolean",
+      "default": false,
+      "description": "Add Redux to the application",
+      "x-prompt": {
+        "message": "Would you like to add Redux to the application?",
+        "type": "confirmation"
+      }
+    },
+    "i18n": {
+      "type": "boolean",
+      "default": false,
+      "description": "Add i18n to the application",
+      "x-prompt": {
+        "message": "Would you like to add i18n to the application?",
+        "type": "confirmation"
+      }
     }
   },
-  "required": ["name"]
+  "required": [
+    "name",
+    "style",
+    "framework",
+    "routing",
+    "auth",
+    "redux",
+    "i18n"
+  ]
 }

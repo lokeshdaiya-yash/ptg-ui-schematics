@@ -8,7 +8,8 @@
     },
     "greeter": {
       "description": "A blank schematic.",
-      "factory": "./greeter/index#greeter"
+      "factory": "./greeter/index#greeter",
+      "schema": "./greeter/schema.json"
     }
   }
 }

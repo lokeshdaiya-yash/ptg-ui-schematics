@@ -1,4 +1,4 @@
-import { strings } from "@angular-devkit/core";
+import { join, normalize, strings } from "@angular-devkit/core";
 import {
   apply,
   applyTemplates,
@@ -11,21 +11,22 @@ import {
   Tree,
   url,
 } from "@angular-devkit/schematics";
+import { getWorkspace } from "@nrwl/workspace";
 
 // You don't have to export the function as default. You can also have more than one rule factory
 // per file.
 export function greeter(_options: any): Rule {
   return async (host: Tree, _context: SchematicContext) => {
-    // const workspace = await getWorkspace(host);
-    // const newProjectRoot =
-    //   (workspace.extensions.newProjectRoot as string | undefined) ?? "";
+    const workspace = await getWorkspace(host);
+    const newProjectRoot =
+      (workspace.extensions.newProjectRoot as string | undefined) ?? "";
     const isRootApp = _options.projectRoot !== undefined;
-    // const appDir = isRootApp
-    //   ? normalize(_options.projectRoot || "")
-    //   : join(normalize(newProjectRoot), strings.dasherize(_options.name));
-    // _options.appDir = appDir;
+    const appDir = isRootApp
+      ? normalize(_options.projectRoot || "")
+      : join(normalize(newProjectRoot), strings.dasherize(_options.name));
+    _options.appDir = appDir;
     let originalOptionsObject = JSON.parse(JSON.stringify(_options));
-    console.log(host);
+    console.log(workspace, originalOptionsObject);
     return chain([
       (tree: Tree, _content: SchematicContext) => {
         console.log("tree in chain", tree.branch);
@@ -57,11 +58,11 @@ export function greeter(_options: any): Rule {
         ])
       ),
       (_tree: Tree, _content: SchematicContext) => {
-        console.log(
-          _tree
-            .read("apps/yash/src/environments/environment.ts")
-            ?.toString("utf-8")
-        );
+        // console.log(
+        //   _tree
+        //     .read("apps/yash/src/environments/environment.ts")
+        //     ?.toString("utf-8")
+        // );
       },
     ]);
   };

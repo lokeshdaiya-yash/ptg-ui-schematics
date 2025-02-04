@@ -121,7 +121,7 @@ function getArgs() {
       },
       {
         name: "auth",
-        message: `Would you like to add Authentication to this application?`,
+        message: `Which Authentication would you like to add to this application?`,
         type: "list",
         default: "custom",
         choices: authOptions,
@@ -175,5 +175,5 @@ function addVSCodeExtensions() {
 
 export function invokeReactGenerator() {
   reactAppGenerator();
-  addVSCodeExtensions();
+  // addVSCodeExtensions();
 }
