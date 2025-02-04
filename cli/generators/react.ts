@@ -17,25 +17,39 @@ export function reactAppGenerator() {
         stdio: [0, 1, 2],
       }
     );
+
     execSync(`npm install @ptg-ui/react-schematics --force`, {
       cwd: `${process.cwd()}/${a.workspace}`,
       stdio: [0, 1, 2],
     });
 
     execSync(
-      `nx generate @ptg-ui/react-schematics:application --name ${a.name} --style ${a.style} --framework ${a.framework} --routing ${a.routing} --redux ${a.redux} --i18n ${a.i18n}`,
+      `nx generate @ptg-ui/react-schematics:application --name ${a.name} --style ${a.style} --framework ${a.framework} --routing ${a.routing} --redux ${a.redux} --i18n ${a.i18n} --auth ${a.auth}`,
       {
         cwd: `${process.cwd()}/${a.workspace}`,
         stdio: [0, 1, 2],
       }
     );
 
-    if (a.routing) {
-      execSync(`npm install --f react-router-dom@6.28.0`, {
-        cwd: `${process.cwd()}/${a.workspace}`,
-        stdio: [0, 1, 2],
-      });
+    const npmPkgs = [];
+    if (a.auth) {
+      if (a.auth === "msal") {
+        npmPkgs.push("@azure/msal-react");
+        npmPkgs.push("@azure/msal-browser");
+      } else if (a.auth === "okta") {
+        npmPkgs.push("@okta/okta-auth-js");
+        npmPkgs.push("@okta/okta-react");
+      }
     }
+
+    if (a.routing) {
+      npmPkgs.push("react-router-dom@6.28.0");
+    }
+    console.log(npmPkgs.join(" "));
+    execSync(`npm install --f ${npmPkgs.join(" ")}`, {
+      cwd: `${process.cwd()}/${a.workspace}`,
+      stdio: [0, 1, 2],
+    });
   });
 }
 
@@ -72,6 +86,20 @@ function getArgs() {
       label: "LESS",
     },
   ];
+  const authOptions: { value: string; label: string }[] = [
+    {
+      value: "custom",
+      label: "Custom",
+    },
+    {
+      value: "msal",
+      label: "Msal",
+    },
+    {
+      value: "okta",
+      label: "Okta",
+    },
+  ];
   return inquirer
     .prompt([
       {
@@ -90,6 +118,13 @@ function getArgs() {
         type: "list",
         default: "none",
         choices: frameWorkOptions,
+      },
+      {
+        name: "auth",
+        message: `Which Authentication would you like to add to this application?`,
+        type: "list",
+        default: "custom",
+        choices: authOptions,
       },
       {
         name: "style",
@@ -140,5 +175,5 @@ function addVSCodeExtensions() {
 
 export function invokeReactGenerator() {
   reactAppGenerator();
-  addVSCodeExtensions();
+  // addVSCodeExtensions();
 }

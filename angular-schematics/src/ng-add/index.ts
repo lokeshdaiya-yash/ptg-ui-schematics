@@ -21,16 +21,13 @@ import { join, normalize } from "path";
 export function ngAdd(options: any): Rule {
   console.log(options);
   return async (host: Tree, _context: SchematicContext) => {
-    // console.log(tree);
-
     const workspace = await getWorkspace(host);
     const newProjectRoot =
-      (workspace.extensions.newProjectRoot as string | undefined) || "";
+      (workspace.extensions.newProjectRoot as string | undefined) ?? "";
     const isRootApp = options.projectRoot !== undefined;
     const appDir = isRootApp
       ? normalize(options.projectRoot || "")
       : join(normalize(newProjectRoot), strings.dasherize(options.name));
-    // const sourceDir = `${appDir}/src/app`;
 
     return chain([
       externalSchematic("@schematics/angular", "module", {
@@ -132,7 +129,7 @@ export function updateStyles(options: any) {
     @import './app/app.theme';
 
     @include app-theme();
-    
+
   `;
   if (options.framework === "material") {
     content =
@@ -146,13 +143,13 @@ export function updateStyles(options: any) {
       margin: 0;
       font-family: Roboto, "Helvetica Neue", sans-serif;
     }
-    
+
     `;
   }
   if (options.framework === "bootstrap") {
     content =
       content +
-      ` 
+      `
     @import "~bootstrap/dist/css/bootstrap.css"
     `;
   }

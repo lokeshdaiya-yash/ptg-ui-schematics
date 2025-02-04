@@ -1,0 +1,19 @@
+### Okta Integration
+
+1. Answer the following question with okta while running
+
+```bash
+ptg-ui-cli
+```
+
+`Would you like to add Authentication to this application?` => `okta`
+
+2. Make sure that you have enabled routing for the this project. Without routing it wont work
+
+3. Configure Okta Client, here all changes related to will automatically get added in to the project 
+Please update following properties in environments file.
+
+   4. yourOktaDomain - okta domain
+   5. clientId - clientId from okta application
+
+3. After serving application click on login it will redirect you to okta login page if configuration are valid

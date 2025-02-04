@@ -1,0 +1,10 @@
+import { OktaAuthOptions } from '@okta/okta-auth-js';
+import { environment } from '../../environments/environment';
+
+const config: OktaAuthOptions = {
+  clientId: environment.clientId,
+  issuer: `https://${environment.yourOktaDomain}/oauth2/default`,
+  redirectUri: environment.redirectURL,
+  scopes: ['openid', 'offline_access', 'profile', 'email'],
+};
+export default config;

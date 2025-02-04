@@ -1,0 +1,19 @@
+// This file can be replaced during build by using the `fileReplacements` array.
+// When building for production, this file is replaced with `environment.prod.ts`.
+
+export const environment = {
+  production: false,
+  clientId: "ABCD",
+ <%  if(auth === 'okta') { %>
+  redirectURL:  'http://localhost:4200/login/callback' ,
+   <% } else { %>  
+   redirectURL :'', 
+   <% } %>
+  <% if(auth === 'okta') { %>
+  yourOktaDomain: "",
+  <% } %>
+};
+
+
+
+

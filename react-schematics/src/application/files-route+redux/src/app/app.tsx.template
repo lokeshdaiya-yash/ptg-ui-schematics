@@ -1,36 +1,54 @@
 
-import React from 'react';
 import styles from './app.module.css';
-import { Container, Row, Col } from 'react-bootstrap';
-import { useSelector, useDispatch } from "react-redux";
-import { NotesState } from "./store/reducer/notesReducer";
-import { addNote } from "./store/action/actions";
-import { Route, Link, Routes } from 'react-router-dom';
+import DashboardComponent from './components/Dashboard';
+import { Route, Link, Routes <% if(auth === 'okta') {  %>, useNavigate <% } %>} from 'react-router-dom';
 import './styles.css';
+<% if (auth == 'custom') { %>import Login from './login/Login';<% } %>
+<% if (auth == 'msal') { %>
+import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
+import { loginRequest } from './login/authConfig';
+<% } %>
+
+
+<% if(auth === 'okta'){ %>
+import OktaAuth, { toRelativeUrl } from '@okta/okta-auth-js';
+import { LoginCallback, Security } from '@okta/okta-react';
+import config from './okta/okta.config';
+import { OktaLoginButton } from './okta/okta-login-button';
+import { useState } from 'react';
+<% } %>
 
 export function App() {
-  const [note, setNote] = React.useState("");
+  <% if(auth === 'okta'){ %>
+ const [userName, setUserName] = useState<string | undefined>('');
+  const navigate = useNavigate();
+  const oktaAuth = new OktaAuth(config);
+<% } %>
 
-  const updateNote = (e: any) => {
-    setNote(e.target.value);
-  };
+   <% if (auth == 'msal') { %>
+  const { instance } = useMsal();
 
-  const onAddNoteClick = () => {
-    if(note){
-      onAddNote(note);
-      setNote("");
-    }
+  const handleLogin = () => {
+    instance.loginRedirect(loginRequest).catch((e) => {
+      console.error(e);
+    });
   };
+  const handleLogout = () => {
+    instance.logoutRedirect();
+  };
+  <% } %>
 
-  const notes = useSelector<NotesState, NotesState["notes"]>(
-    (state) => state.notes
-  );
-  const dispatch = useDispatch();
-  const onAddNote = (note: string) => {
-    dispatch(addNote(note));
+<% if(auth === 'okta'){  %>
+ const restoreOriginalUri = (_oktaAuth: OktaAuth, originalUri: string) => {
+      _oktaAuth.getUser().then(user => setUserName(user.name));
+    navigate(toRelativeUrl(originalUri || '/', window.location.origin));
   };
+<% }%>
 
   return (
+     <% if(auth === 'okta'){ %>
+    <Security oktaAuth={oktaAuth} restoreOriginalUri={restoreOriginalUri}>
+   <% } %>
     <div>
       <div className='headerContainer'>
         <section>
@@ -42,98 +60,51 @@ export function App() {
                 style={{ height: 50, width: 84 }}
               />
             </a>
-              <div>
-                <Routes>
-                  <Route
-                    path="/"
-                    element={
-                      <>
-                        <Link to="/dashboard" className="headerLink">
-                          Dashboard
-                        </Link>
-                        <Link to="/home" className="headerLink">
-                          Home
-                        </Link>
-                      </>
-                    }
-                  />
-                  <Route
-                    path="/dashboard"
-                    element={
-                        <Link to="/home" className="headerLink">
-                          Home
-                        </Link>
-                    }
-                  />
-                  <Route
-                    path="/home"
-                    element={
-                        <Link to="/dashboard" className="headerLink">
-                          Dashboard
-                        </Link>
-                    }
-                  />
-                </Routes>
-              </div>
+            <div>
+              <Link to="/dashboard" className="headerLink">
+                Dashboard
+              </Link>
+              <Link to="/home" className="headerLink">
+                Home
+              </Link>
+            </div>
             <div className="actionContainer">
-              <button className="loginBtn">LOGIN</button>
+              <% if (auth === 'custom') { %>
+              <Link to="/login" className="loginBtn headerLink">
+                LOGIN
+              </Link>
+              <% } %>
+              <% if (auth === 'msal') { %>
+              <AuthenticatedTemplate>
+                <button onClick={handleLogout} className="loginBtn">Logout</button>
+              </AuthenticatedTemplate>
+              <UnauthenticatedTemplate>
+                <button onClick={handleLogin} className="loginBtn">
+                  LOGIN
+                </button>
+              </UnauthenticatedTemplate>
+              <% } %>
+              <% if (auth === 'okta') { %>
+             <OktaLoginButton></OktaLoginButton>
+              <% }%>
             </div>
           </nav>
         </section>
       </div>
 
-
-
-      <div className="loginContainer">
-        <div className='innerContainer'>
-          <section className="sectionContainer">
-            <div className="outerRow">
-              <div className="columnLeft">
-                <h1>
-                  Welcome... <br />
-                  to the Yash Technology Front End Code Generator Tool
-                </h1>
-                <p>
-                The CLI is a powerful tool for creating, modifying, and maintaining any software project, and is particularly useful for customizing our UI projects. We can use this CLI to enforce architectural rules and conventions, making our projects consistent and inter-operative.
-                </p>
-
-                <div className="innerRow">
-                  <div className="coulmn">
-                    <input
-                      onChange={updateNote}
-                      value={note}
-                      type="text"
-                      className="inputField"
-                      id="inputPassword2"
-                      placeholder="Type here..."
-                    />
-                  </div>
-                  
-                  <div className="coulmn">
-                    <button onClick={() => onAddNoteClick()}>
-                      GENERATE
-                    </button>
-                  </div>
-                  
-                </div>
-                <div className='paddingLeft'>
-                    <ol>
-                      {notes.map((note) => {
-                        return <li key={note} className='data-list'>{note}</li>;
-                      })}
-                    </ol>
-                  </div>
-              
-              </div>
-                <div className='loginImgContainer '>
-                  <div className="floatEnd" ><img src="assets/images/illustration 1.png" alt="" /></div>
-                </div>
- 
-            </div>
-          </section>
-        </div>
-      </div>
+      <Routes>
+        <Route path="/" element={<DashboardComponent />} />
+        <Route path="/dashboard" element={<DashboardComponent />} />
+        <Route path="/home" element={<DashboardComponent />} />
+        <% if(auth == 'custom') { %><Route path="/login" element={<Login />} /><% } %>
+         <% if(auth === 'okta'){ %>  
+                    <Route path="/login/callback" element={<LoginCallback />}></Route>
+                  <% } %>
+      </Routes>
     </div>
+     <% if(auth === 'okta'){ %>
+    </Security>
+   <% } %>
   );
 }
 
