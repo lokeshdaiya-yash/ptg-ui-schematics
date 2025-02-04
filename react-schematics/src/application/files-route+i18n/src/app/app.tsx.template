@@ -4,7 +4,10 @@ import DashboardComponent from './components/Dashboard';
 import { Route, Link, Routes } from 'react-router-dom';
 import './styles.css';
 import "./translations/i18n";
-<% if (auth == 'custom') { %>import Login from './login/Login';<% } %>
+<% if (auth == 'custom') { %>
+import Login from './login/Login';
+import AuthService from './services/auth.service';
+<% } %>
 <% if (auth == 'msal') { %>
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
 import { loginRequest } from './config/msalConfig';
@@ -13,6 +16,15 @@ import { loginRequest } from './config/msalConfig';
 export function App() {
   const [langValue, setLangValue] = React.useState("en");
   const { i18n } = useTranslation();
+  <% if (auth == 'custom') { %>
+  const getUserData = JSON.parse(AuthService.getToken());
+
+  const handleLogout = () => {
+    AuthService.removeToken();
+    localStorage.clear();
+    window.location.reload();
+  };
+  <% } %>
   <% if (auth == 'msal') { %>
   const { instance } = useMsal();
 
@@ -64,9 +76,15 @@ export function App() {
                 </select>
               </div>
               <% if (auth === 'custom') { %>
-              <Link to="/login" className="loginBtn headerLink">
-                LOGIN
-              </Link>
+              {getUserData?.user?.username ? (
+                <button className="loginBtn headerLink" onClick={handleLogout}>
+                  LOGOUT
+                </button>
+              ) : (
+                <Link to="/login" className="loginBtn headerLink">
+                  LOGIN
+                </Link>
+              )}
               <% } %>
               <% if (auth === 'msal') { %>
               <AuthenticatedTemplate>

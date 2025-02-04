@@ -13,16 +13,6 @@
         width: 80%;
       }
     }
-    .signup-btn,
-    .forgot-password {
-      font-size: 0.875rem;
-      color: #eef2f6;
-      text-decoration: none;
-      cursor: pointer;
-      &:hover {
-        text-decoration: underline;
-      }
-    }
 
     .input-group {
       ::ng-deep {

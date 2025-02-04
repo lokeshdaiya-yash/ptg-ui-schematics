@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import { authClass } from '../services/auth.service';
+import AuthService from '../services/auth.service';
 import './Login.scss';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     isLoading: false,
     isAlert: false,
@@ -83,26 +85,30 @@ const Login = () => {
     });
   };
 
-  const handleLogin = (event: any) => {
+  const handleLogin = async (event: any) => {
     event.preventDefault();
     setState('error', null);
     setState('isLoading', true);
-    authClass
-      .login({
+
+    try {
+      const response = await AuthService.login({
         identifier: user.email,
         password: user.password,
-      })
-      .then((response: any) => {
-        setState('isLoading', false);
-        if (response.statusCode && response.statusCode !== 200) {
-          throw new Error('Function not implemented.');
-        } else if (response.data) {
-          alert('Login Success');
-        }
-      })
-      .catch((error: any) => {
-        setState('isAlert', true);
       });
+
+      if (response.user && response.user.email) {
+        AuthService.setToken(JSON.stringify(response));
+        alert('Login Success');
+        navigate('/home');
+        window.location.reload();
+      } else if (response.message) {
+        throw new Error('Function not implemented.');
+      }
+    } catch (error) {
+      alert(`Error fetching data: ${error}`);
+    } finally {
+      setState('isLoading', true);
+    }
   };
 
   //validate on focus out or blur input

@@ -5,7 +5,7 @@
  */
 
 class AuthService {
-  private TOKEN_KEY = "userdata";
+  private readonly TOKEN_KEY = "userdata";
 
   setToken(token: any): void {
     if (token) {
@@ -13,21 +13,37 @@ class AuthService {
     }
   }
 
+  getToken(): any {
+    return localStorage.getItem(this.TOKEN_KEY);
+  }
+
+  removeToken(): void {
+    localStorage.removeItem(this.TOKEN_KEY);
+  }
+
   async login(payload: any) {
-    const response = await fetch(
-      "https://yash-ui-strapi.azurewebsites.net/api/auth/local", // Replace this with your own URL
-      {
-        method: "POST",
-        mode: "cors",
-        cache: "no-cache",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
+    try {
+      const response = await fetch(
+        "https://yash-ui-strapi.azurewebsites.net/api/auth/local", // Replace this with your own URL
+        {
+          method: "POST",
+          mode: "cors",
+          cache: "no-cache",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (response.status !== 200) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    );
-    return response.json();
+      return await response.json();
+    } catch (error) {
+      return error;
+    }
   }
 }
 
-export const authClass = new AuthService();
+export default new AuthService();

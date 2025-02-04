@@ -4,7 +4,10 @@ import { Route, Link, Routes } from 'react-router-dom';
 import './styles.css';
 import './translations/i18n';
 import DashboardComponent from './components/Dashboard';
-<% if (auth == 'custom') { %>import Login from './login/Login';<% } %>
+<% if (auth == 'custom') { %>
+import Login from './login/Login';
+import AuthService from './services/auth.service';
+<% } %>
 <% if (auth == 'msal') { %>
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
 import { loginRequest } from './config/msalConfig';
@@ -20,6 +23,15 @@ export function App() {
     setLangValue(e.target.value);
     i18n.changeLanguage(e.target.value);
   };
+  <% if (auth == 'custom') { %>
+  const getUserData = JSON.parse(AuthService.getToken());
+
+  const handleLogout = () => {
+    AuthService.removeToken();
+    localStorage.clear();
+    window.location.reload();
+  };
+  <% } %>
   <% if (auth == 'msal') { %>
   const handleLogin = () => {
     instance.loginRedirect(loginRequest).catch((e) => {
@@ -71,9 +83,15 @@ export function App() {
               </div>
 
               <% if (auth === 'custom') { %>
-              <Link to="/login" className="loginBtn headerLink">
-                LOGIN
-              </Link>
+              {getUserData?.user?.username ? (
+                <button className="loginBtn headerLink" onClick={handleLogout}>
+                  LOGOUT
+                </button>
+              ) : (
+                <Link to="/login" className="loginBtn headerLink">
+                  LOGIN
+                </Link>
+              )}
               <% } %>
               <% if (auth === 'msal') { %>
               <AuthenticatedTemplate>
