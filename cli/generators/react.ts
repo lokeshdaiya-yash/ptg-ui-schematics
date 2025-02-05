@@ -120,7 +120,7 @@ function getArgs() {
       },
       {
         name: "auth",
-        message: `Would you like to add Authentication to this application?`,
+        message: `Which Authentication you would like to add to this Application??`,
         type: "list",
         default: "custom",
         choices: authOptions,

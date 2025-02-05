@@ -7,7 +7,7 @@ import AuthService from './services/auth.service';
 <% } %>
 <% if (auth === 'msal') { %>
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
-import { loginRequest } from './login/authConfig';
+import { loginRequest } from './login/msalConfig';
 <% } %>
 <% if(auth === 'okta'){ %>
 import OktaAuth, { toRelativeUrl } from '@okta/okta-auth-js';

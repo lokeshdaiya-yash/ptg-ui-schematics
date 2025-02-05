@@ -9,7 +9,6 @@ import {
 } from "fs";
 import * as path from "path";
 import { dirSync } from "tmp";
-import * as inquirer from "inquirer";
 
 async function createSandbox() {
   const tmpDir = dirSync().name;
@@ -125,5 +124,5 @@ function cleanup(dirPath: string) {
 export async function invokeAngularGenerator() {
   const temp = await createSandbox();
   createApp(temp);
-  // addVSCodeExtensions();
+  addVSCodeExtensions();
 }
