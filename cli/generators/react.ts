@@ -45,7 +45,6 @@ export function reactAppGenerator() {
     if (a.routing) {
       npmPkgs.push("react-router-dom@6.28.0");
     }
-    console.log(npmPkgs.join(" "));
     execSync(`npm install --f ${npmPkgs.join(" ")}`, {
       cwd: `${process.cwd()}/${a.workspace}`,
       stdio: [0, 1, 2],

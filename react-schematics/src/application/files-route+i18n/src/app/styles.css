@@ -1,3 +1,7 @@
+:root {
+  --btn-active:#f6190d;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -99,8 +103,8 @@
   font-size: 14px;
 }
 .loginContainer button {
-  background-color: #f6190d;
-  border: 1px solid #f6190d;
+  background-color: --btn-active;
+  border: 1px solid --btn-active;
   font-weight: 500;
   cursor: pointer;
   border-radius: 50px;
@@ -112,7 +116,7 @@
   margin-bottom: 0.5rem !important;
 }
 .btn:hover {
-  background-color: #f6190d;
+  background-color: --btn-active;
 }
 .floatEnd {
   float: right !important;
@@ -209,8 +213,8 @@
   left: 16px;
 }
 .loginBtn {
-  background-color: #f6190d;
-  border: 1px solid #f6190d;
+  background-color: --btn-active;
+  border: 1px solid --btn-active;
   font-weight: 500;
   font-size: 14px;
   border-radius: 50px !important;
@@ -225,8 +229,8 @@
   padding-bottom: 0.5rem !important;
 }
 .loginBtn:active {
-  background: #f6190d !important;
-  border: 1px solid #f6190d;
+  background: --btn-active !important;
+  border: 1px solid --btn-active;
 }
 
 @media (min-width: 576px) {

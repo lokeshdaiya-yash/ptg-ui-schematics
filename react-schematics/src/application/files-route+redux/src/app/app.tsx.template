@@ -7,7 +7,7 @@ import AuthService from './services/auth.service';
 <% } %>
 <% if (auth === 'msal') { %>
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
-import { loginRequest } from './config/msalConfig';
+import { loginRequest } from './login/authConfig';
 <% } %>
 <% if(auth === 'okta'){ %>
 import OktaAuth, { toRelativeUrl } from '@okta/okta-auth-js';
@@ -44,11 +44,11 @@ export function App() {
     instance.logoutRedirect();
   };
   <% } %>
-  <% if(auth === 'okta'){  %>
-  const restoreOriginalUri = (_oktaAuth: OktaAuth, originalUri: string) => {
+  <% if(auth === 'okta') { %>
+    const restoreOriginalUri = (_oktaAuth: OktaAuth, originalUri: string) => {
       _oktaAuth.getUser().then(user => setUserName(user.name));
-    navigate(toRelativeUrl(originalUri || '/', window.location.origin));
-  };
+      navigate(toRelativeUrl(originalUri || '/', window.location.origin));
+    };
   <% }%>
 
   return (
@@ -114,7 +114,7 @@ export function App() {
         <% } %>
       </Routes>
     </div>
-    <% if(auth === 'okta'){ %>
+    <% if(auth === 'okta') { %>
     </Security>
     <% } %>
   );

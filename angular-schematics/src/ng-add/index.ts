@@ -19,7 +19,6 @@ import { join, normalize } from "path";
 // You don't have to export the function as default. You can also have more than one rule factory
 // per file.
 export function ngAdd(options: any): Rule {
-  console.log(options);
   return async (host: Tree, _context: SchematicContext) => {
     const workspace = await getWorkspace(host);
     const newProjectRoot =
@@ -114,7 +113,6 @@ export function addBootstrapToPackageJson(): Rule {
 }
 
 export function addNrwlToPackageJson(): Rule {
-  console.log("adding nrwl packages");
   return addDepsToPackageJson(
     {
       "@nrwl/angular": "11.3.2",

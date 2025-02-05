@@ -13,7 +13,6 @@ import * as inquirer from "inquirer";
 
 async function createSandbox() {
   const tmpDir = dirSync().name;
-  console.log(`tempDir`, tmpDir);
   try {
     writeFileSync(
       path.join(tmpDir, "package.json"),
