@@ -1,14 +1,14 @@
 
 import styles from './app.module.css';
 import DashboardComponent from './components/Dashboard';
-<% if (auth == 'msal') { %>
+<% if (auth === 'msal') { %>
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
 import { loginRequest } from './config/msalConfig';
 <% } %>
 import './styles.css';
 
 export function App() {
-  <% if (auth == 'msal') { %>
+  <% if (auth === 'msal') { %>
   const { instance } = useMsal();
 
   const handleLogin = () => {

@@ -4,11 +4,11 @@ import DashboardComponent from './components/Dashboard';
 import { Route, Link, Routes } from 'react-router-dom';
 import './styles.css';
 import "./translations/i18n";
-<% if (auth == 'custom') { %>
+<% if (auth === 'custom') { %>
 import Login from './login/Login';
 import AuthService from './services/auth.service';
 <% } %>
-<% if (auth == 'msal') { %>
+<% if (auth === 'msal') { %>
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
 import { loginRequest } from './config/msalConfig';
 <% } %>
@@ -16,7 +16,7 @@ import { loginRequest } from './config/msalConfig';
 export function App() {
   const [langValue, setLangValue] = React.useState("en");
   const { i18n } = useTranslation();
-  <% if (auth == 'custom') { %>
+  <% if (auth === 'custom') { %>
   const getUserData = JSON.parse(AuthService.getToken());
 
   const handleLogout = () => {
@@ -25,7 +25,7 @@ export function App() {
     window.location.reload();
   };
   <% } %>
-  <% if (auth == 'msal') { %>
+  <% if (auth === 'msal') { %>
   const { instance } = useMsal();
 
   const handleLogin = () => {
@@ -108,7 +108,7 @@ export function App() {
         <Route path="/" element={<DashboardComponent />} />
         <Route path="/dashboard" element={<DashboardComponent />} />
         <Route path="/home" element={<DashboardComponent />} />
-        <% if(auth == 'custom') { %><Route path="/login" element={<Login />} /><% } %>
+        <% if(auth === 'custom') { %><Route path="/login" element={<Login />} /><% } %>
       </Routes>
     </div>
   );

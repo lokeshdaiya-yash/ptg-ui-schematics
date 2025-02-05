@@ -11,7 +11,6 @@ import * as path from "path";
 import { dirSync } from "tmp";
 
 async function createSandbox() {
-  console.log(`Creating a sandbox...`);
   const tmpDir = dirSync().name;
   console.log(`tempDir`, tmpDir);
   try {
@@ -27,7 +26,6 @@ async function createSandbox() {
         license: "MIT",
       })
     );
-    console.log("package.json created successufully");
   } catch (error) {
     cleanup(tmpDir);
     console.error("Error creating package.json", error);
@@ -38,7 +36,6 @@ async function createSandbox() {
       cwd: tmpDir,
       stdio: [0, 1, 2],
     });
-    console.log("Dependencies installed successfully");
   } catch (error) {
     cleanup(tmpDir);
     console.error("error on dependency installation", error);
@@ -71,10 +68,8 @@ async function createSandbox() {
 //   });
 // }
 async function createApp(tmpDir: string) {
-  console.log("Inside createApp Angular");
   const collection = `${tmpDir}/node_modules/@ptg-ui/angular-schematics/src/collection.json`;
   const command = `${tmpDir}/node_modules/.bin/ng new --collection=${collection} --strict false`;
-  console.log("current directory", process.cwd());
   try {
     execSync(`${command}`, {
       stdio: [0, 1, 2],
@@ -85,7 +80,6 @@ async function createApp(tmpDir: string) {
     console.log({ err });
   }
   cleanup(tmpDir);
-  console.log("createApp Function Completed");
 }
 
 function addVSCodeExtensions() {

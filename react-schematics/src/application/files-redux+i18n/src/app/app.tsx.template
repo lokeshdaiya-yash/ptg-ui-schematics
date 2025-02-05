@@ -2,7 +2,7 @@
 import React from 'react';
 import { useTranslation } from "react-i18next";
 import DashboardComponent from './components/Dashboard';
-<% if (auth == 'msal') { %>
+<% if (auth === 'msal') { %>
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
 import { loginRequest } from './config/msalConfig';
 <% } %>
@@ -12,7 +12,7 @@ import "./translations/i18n";
 export function App() {
   const [langValue, setLangValue] = React.useState("en");
   const { i18n } = useTranslation();
-  <% if (auth == 'msal') { %>
+  <% if (auth === 'msal') { %>
   const { instance } = useMsal();
   <% } %>
 
@@ -20,7 +20,7 @@ export function App() {
     setLangValue(e.target.value)
     i18n.changeLanguage(e.target.value);
   };
-  <% if (auth == 'msal') { %>
+  <% if (auth === 'msal') { %>
   const handleLogin = () => {
     instance.loginRedirect(loginRequest).catch((e) => {
       console.error(e);

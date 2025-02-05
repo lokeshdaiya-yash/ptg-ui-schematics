@@ -4,6 +4,12 @@
   background: #eef2f6;
   overflow: hidden;
 
+  &.d-flex {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+
   .login-form-wrapper {
     background: white;
     padding: 8% 10%;

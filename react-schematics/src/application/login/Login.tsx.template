@@ -102,10 +102,10 @@ const Login = () => {
         navigate('/home');
         window.location.reload();
       } else if (response.message) {
-        throw new Error('Function not implemented.');
+        throw new Error('Invalid identifier or password');
       }
     } catch (error) {
-      alert(`Error fetching data: ${error}`);
+      alert(error);
     } finally {
       setState('isLoading', true);
     }

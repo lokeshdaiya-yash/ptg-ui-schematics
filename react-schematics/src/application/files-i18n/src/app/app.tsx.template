@@ -3,7 +3,7 @@ import React from 'react';
 import styles from './app.module.css';
 import { useTranslation, Trans } from "react-i18next";
 import i18next, { default as i18n } from 'i18next';
-<% if (auth == 'msal') { %>
+<% if (auth === 'msal') { %>
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
 import { loginRequest } from './config/msalConfig';
 <% } %>
@@ -12,7 +12,7 @@ import "./translations/i18n";
 
 export function App() {
   const [langValue, setLangValue] = React.useState("en");
-  <% if (auth == 'msal') { %>
+  <% if (auth === 'msal') { %>
   const { instance } = useMsal();
 
   const handleLogin = () => {
