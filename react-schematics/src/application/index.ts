@@ -35,19 +35,19 @@ export default function (options: any): Rule {
   return async (host: Tree, _context: SchematicContext) => {
     const workspace = await getWorkspace(host);
     const newProjectRoot =
-      (workspace.extensions.newProjectRoot as string | undefined) || "";
+      (workspace.extensions.newProjectRoot as string | undefined) ?? "";
     const isRootApp = options.projectRoot !== undefined;
     const appDir = isRootApp
       ? normalize(options.projectRoot || "")
       : join(normalize(newProjectRoot), strings.dasherize(options.name));
     options.appDir = appDir;
-    var originalOptionsObject = JSON.parse(JSON.stringify(options));
+    let originalOptionsObject = JSON.parse(JSON.stringify(options));
     // The chain rule allows us to chain multiple rules and apply them one after the other.
 
     return chain([
       (_tree: Tree, context: SchematicContext) => {
         // Show the options for this Schematics.
-        context.logger.info("Application: " + JSON.stringify(options));
+        context.logger.info("Application->: " + JSON.stringify(options));
       },
 
       // The schematic Rule calls the schematic from the same collection, with the options
@@ -57,9 +57,12 @@ export default function (options: any): Rule {
         ...options,
       }),
       //schematic('my-other-schematic', { option: true }),
-      setFramework(originalOptionsObject),
+      setFramework(originalOptionsObject, isRootApp),
       setReduxTpPackageJson(originalOptionsObject),
       setI18nToPackageJson(originalOptionsObject),
+      originalOptionsObject.redux
+        ? addDashboardToProject(originalOptionsObject, isRootApp)
+        : noop,
       // The mergeWith() rule merge two trees; one that's coming from a Source (a Tree with no
       // base), and the one as input to the rule. You can think of it like rebasing a Source on
       // top of your current set of changes. In this case, the Source is that apply function.
@@ -124,31 +127,18 @@ export default function (options: any): Rule {
       !originalOptionsObject.routing &&
       originalOptionsObject.redux &&
       !originalOptionsObject.i18n
-        ? originalOptionsObject.framework === "material"
-          ? mergeWith(
-              apply(url("./files-mui+redux"), [
-                applyTemplates({
-                  utils: strings,
-                  ...originalOptionsObject,
-                  appName: originalOptionsObject.name,
-                  isRootApp,
-                }),
-                move(`apps/${options.name}`),
-              ]),
-              MergeStrategy.Overwrite
-            )
-          : mergeWith(
-              apply(url("./files-bootstrap+redux"), [
-                applyTemplates({
-                  utils: strings,
-                  ...originalOptionsObject,
-                  appName: originalOptionsObject.name,
-                  isRootApp,
-                }),
-                move(`apps/${options.name}`),
-              ]),
-              MergeStrategy.Overwrite
-            )
+        ? mergeWith(
+            apply(url("./files-redux"), [
+              applyTemplates({
+                utils: strings,
+                ...originalOptionsObject,
+                appName: originalOptionsObject.name,
+                isRootApp,
+              }),
+              move(`apps/${options.name}`),
+            ]),
+            MergeStrategy.Overwrite
+          )
         : noop,
       !originalOptionsObject.routing &&
       !originalOptionsObject.redux &&
@@ -230,18 +220,58 @@ export default function (options: any): Rule {
             MergeStrategy.Overwrite
           )
         : noop,
+      originalOptionsObject.auth === "okta"
+        ? mergeWith(
+            apply(url("./okta/"), [
+              applyTemplates({}),
+              move(`apps/${options.name}/src/app/okta/`),
+            ]),
+            MergeStrategy.Overwrite
+          )
+        : noop,
+      mergeWith(
+        apply(url("./environments/"), [
+          applyTemplates({ ...originalOptionsObject }),
+          move(`apps/${options.name}/src/environments/`),
+        ]),
+        MergeStrategy.Overwrite
+      ),
     ]);
   };
 }
-export function setFramework(options: any) {
+export function setFramework(options: any, isRootApp: boolean) {
+  const tasks = [];
   if (options.framework === "material") {
-    return chain([addMaterialToPackageJson()]);
+    tasks.push(addMaterialToPackageJson());
   }
-
+  if (options.auth === "custom") {
+    tasks.push(
+      addLoginToProject(
+        options,
+        isRootApp,
+        "./login/",
+        `apps/${options.name}/src/app/login/`
+      )
+    );
+    tasks.push(addAuthServiceToProject(options, isRootApp));
+  }
+  if (options.auth === "msal") {
+    tasks.push(
+      addLoginToProject(
+        options,
+        isRootApp,
+        "./msal/",
+        `apps/${options.name}/src/app/config/`
+      )
+    );
+    tasks.push(addLoginToProject(options, isRootApp, "./documentation/", `/`));
+  }
   if (options.framework === "bootstrap") {
-    return chain([addBootstrapToPackageJson(), updateStyles(options)]);
+    tasks.push(addBootstrapToPackageJson());
+    tasks.push(updateStyles(options));
   }
-  return noop;
+  if (tasks.length > 0) return chain(tasks);
+  else return noop;
 }
 
 export function setReduxTpPackageJson(options: any): Rule {
@@ -276,6 +306,60 @@ export function setI18nToPackageJson(options: any): Rule {
       false
     ),
   ]);
+}
+
+export function addDashboardToProject(_options: any, isRootApp: boolean): Rule {
+  const inputUrl = "./redux-i18-dashboard/";
+  return mergeWith(
+    apply(url(inputUrl), [
+      applyTemplates({
+        utils: strings,
+        ..._options,
+        appName: "components",
+        isRootApp,
+      }),
+      move(`apps/${_options.name}/src/app/components/`),
+    ]),
+    MergeStrategy.Overwrite
+  );
+}
+
+export function addLoginToProject(
+  _options: any,
+  isRootApp: boolean,
+  inputUrl: string,
+  outputPath: string
+): Rule {
+  return mergeWith(
+    apply(url(inputUrl), [
+      applyTemplates({
+        utils: strings,
+        ..._options,
+        appName: "components",
+        isRootApp,
+      }),
+      move(outputPath),
+    ]),
+    MergeStrategy.Overwrite
+  );
+}
+export function addAuthServiceToProject(
+  _options: any,
+  isRootApp: boolean
+): Rule {
+  let inputUrl = "./services/";
+  return mergeWith(
+    apply(url(inputUrl), [
+      applyTemplates({
+        utils: strings,
+        ..._options,
+        appName: "components",
+        isRootApp,
+      }),
+      move(`apps/${_options.name}/src/app/services/`),
+    ]),
+    MergeStrategy.Overwrite
+  );
 }
 
 export function addMaterialToPackageJson(): Rule {

@@ -1,13 +1,66 @@
 
+
 import React from 'react';
-import styles from './app.module.css';
-import { Container, Row, Col } from 'react-bootstrap';
-import { Route, Link, Routes } from 'react-router-dom';
+import { Route, Link, Routes <% if(auth === 'okta') {  %>, useNavigate <% } %>} from 'react-router-dom';
+<% if (auth === 'custom') { %>
+import Login from './login/Login';
+import AuthService from './services/auth.service';
+<% } %>
+<% if (auth === 'msal') { %>
+import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
+import { loginRequest } from './config/msalConfig';
+<% } %>
+// Okta configuration
+<% if(auth === 'okta'){ %>
+import OktaAuth, { toRelativeUrl } from '@okta/okta-auth-js';
+import { LoginCallback, Security } from '@okta/okta-react';
+import config from './okta/okta.config';
+import { OktaLoginButton } from './okta/okta.login-button';
+import { useState } from 'react';
+<% } %>
+
 import './styles.css';
 
 export function App() {
+  <% if (auth === 'custom') { %>
+  const getUserData = JSON.parse(AuthService.getToken());
+
+  const handleLogout = () => {
+    AuthService.removeToken();
+    localStorage.clear();
+    window.location.reload();
+  };
+  <% } %>
+  <% if (auth === 'msal') { %>
+  const { instance } = useMsal();
+  <% } %>
+  <% if(auth === 'okta') { %>
+  const [userName, setUserName] = useState<string | undefined>('');
+  const navigate = useNavigate();
+  const oktaAuth = new OktaAuth(config);
+  <% } %>
+  <% if (auth === 'msal') { %>
+  const handleLogin = () => {
+    instance.loginRedirect(loginRequest).catch((e) => {
+      console.error(e);
+    });
+  };
+  const handleLogout = () => {
+    instance.logoutRedirect();
+  };
+  <% } %>
+
+  <% if(auth === 'okta'){ %>
+    const restoreOriginalUri = (_oktaAuth: OktaAuth, originalUri: string) => {
+      _oktaAuth.getUser().then(user => setUserName(user.name));
+      navigate(toRelativeUrl(originalUri || '/', window.location.origin));
+    };
+  <% } %>
 
   return (
+    <% if(auth === 'okta'){ %>
+    <Security oktaAuth={oktaAuth} restoreOriginalUri={restoreOriginalUri}>
+    <% } %>
     <div>
       <div className='headerContainer'>
         <section>
@@ -19,48 +72,74 @@ export function App() {
                 style={{ height: 50, width: 84 }}
               />
             </a>
-              <div>
-                <Routes>
-                  <Route
-                    path="/"
-                    element={
-                      <>
-                        <Link to="/dashboard" className="headerLink">
-                          Dashboard
-                        </Link>
-                        <Link to="/home" className="headerLink">
-                          Home
-                        </Link>
-                      </>
-                    }
-                  />
-                  <Route
-                    path="/dashboard"
-                    element={
-                        <Link to="/home" className="headerLink">
-                          Home
-                        </Link>
-                    }
-                  />
-                  <Route
-                    path="/home"
-                    element={
-                        <Link to="/dashboard" className="headerLink">
-                          Dashboard
-                        </Link>
-                    }
-                  />
-                </Routes>
-              </div>
+            <div>
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <>
+                      <Link to="/dashboard" className="headerLink">
+                        Dashboard
+                      </Link>
+                      <Link to="/home" className="headerLink">
+                        Home
+                      </Link>
+                    </>
+                  }
+                />
+                <Route
+                  path="/dashboard"
+                  element={
+                      <Link to="/home" className="headerLink">
+                        Home
+                      </Link>
+                  }
+                />
+                <Route
+                  path="/home"
+                  element={
+                      <Link to="/dashboard" className="headerLink">
+                        Dashboard
+                      </Link>
+                  }
+                />
+                <% if(auth === 'custom') { %>
+                <Route path="/login" element={<Login />} />
+                <% } %>
+                 <% if(auth === 'okta'){ %>
+                    <Route path="/login/callback" element={<LoginCallback />}></Route>
+                  <% } %>
+              </Routes>
+            </div>
             <div className="actionContainer">
-            
-              <button className="loginBtn">LOGIN</button>
+              <% if (auth === 'custom') { %>
+              {getUserData?.user?.username ? (
+                <button className="loginBtn headerLink" onClick={handleLogout}>
+                  LOGOUT
+                </button>
+              ) : (
+                <Link to="/login" className="loginBtn headerLink">
+                  LOGIN
+                </Link>
+              )}
+              <% } %>
+              <% if (auth === 'msal') { %>
+              <AuthenticatedTemplate>
+                <button onClick={handleLogout} className="loginBtn">Logout</button>
+              </AuthenticatedTemplate>
+              <UnauthenticatedTemplate>
+                <button onClick={handleLogin} className="loginBtn">
+                  LOGIN
+                </button>
+              </UnauthenticatedTemplate>
+              <% } %>
+              <% if (auth === 'okta') { %>
+             <OktaLoginButton></OktaLoginButton>
+              <% }%>
             </div>
           </nav>
         </section>
       </div>
-
-
 
       <div className="loginContainer">
         <div className='innerContainer'>
@@ -68,7 +147,7 @@ export function App() {
             <div className="outerRow">
               <div className="columnLeft">
                 <h1>
-                  Welcome... <br />
+                  Welcome... <% if(auth === 'okta'){ %> {userName}  <% } %> <br />
                   to the Yash Technology Front End Code Generator Tool
                 </h1>
                 <p>
@@ -76,15 +155,17 @@ export function App() {
                 </p>
 
               </div>
-                <div className='loginImgContainer '>
-                  <div className="floatEnd" ><img src="assets/images/illustration 1.png" alt="" /></div>
-                </div>
- 
+              <div className='loginImgContainer '>
+                <div className="floatEnd" ><img src="assets/images/illustration 1.png" alt="" /></div>
+              </div>
             </div>
           </section>
         </div>
       </div>
     </div>
+    <% if(auth === 'okta'){ %>
+    </Security>
+   <% } %>
   );
 }
 

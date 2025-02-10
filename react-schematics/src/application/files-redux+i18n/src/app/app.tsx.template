@@ -1,45 +1,35 @@
 
 import React from 'react';
-import styles from './app.module.css';
-import { Container, Row, Col } from 'react-bootstrap';
-import { useSelector, useDispatch } from "react-redux";
-import { NotesState } from "./store/reducer/notesReducer";
-import { addNote } from "./store/action/actions";
-import { useTranslation, Trans } from "react-i18next";
-import i18next, { default as i18n } from 'i18next';
+import { useTranslation } from "react-i18next";
+import DashboardComponent from './components/Dashboard';
+<% if (auth === 'msal') { %>
+import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
+import { loginRequest } from './config/msalConfig';
+<% } %>
 import './styles.css';
 import "./translations/i18n";
 
 export function App() {
-  const [note, setNote] = React.useState("");
-
   const [langValue, setLangValue] = React.useState("en");
+  const { i18n } = useTranslation();
+  <% if (auth === 'msal') { %>
+  const { instance } = useMsal();
+  <% } %>
 
-  const { t, i18n } = useTranslation();
   const changeLanguage = (e: any ) => {
     setLangValue(e.target.value)
     i18n.changeLanguage(e.target.value);
   };
-
-  const updateNote = (e: any) => {
-    setNote(e.target.value);
+  <% if (auth === 'msal') { %>
+  const handleLogin = () => {
+    instance.loginRedirect(loginRequest).catch((e) => {
+      console.error(e);
+    });
   };
-
-  const onAddNoteClick = () => {
-    if(note){
-      onAddNote(note);
-      setNote("");
-    }
+  const handleLogout = () => {
+    instance.logoutRedirect();
   };
-
-  const notes = useSelector<NotesState, NotesState["notes"]>(
-    (state) => state.notes
-  );
-  const dispatch = useDispatch();
-  const onAddNote = (note: string) => {
-    dispatch(addNote(note));
-  };
-
+  <% } %>
   return (
     <div>
       <div className='headerContainer'>
@@ -52,9 +42,8 @@ export function App() {
                 style={{ height: 50, width: 84 }}
               />
             </a>
-              
+
             <div className="actionContainer">
-            
               <div className="selectDropdown">
                 <img
                   src="assets/images/language_2x.jpg"
@@ -66,64 +55,25 @@ export function App() {
                   <option value="zh">Chinese</option>
                 </select>
               </div>
-            
+              <% if (auth === 'msal') { %>
+              <AuthenticatedTemplate>
+                <button onClick={handleLogout} className="loginBtn">Logout</button>
+              </AuthenticatedTemplate>
+              <UnauthenticatedTemplate>
+                <button onClick={handleLogin} className="loginBtn">
+                  LOGIN
+                </button>
+              </UnauthenticatedTemplate>
+              <% } %>
+              <% if (auth === 'okta' || auth === 'custom') { %>
               <button className="loginBtn">LOGIN</button>
+              <% }%>
             </div>
           </nav>
         </section>
       </div>
 
-
-
-      <div className="loginContainer">
-        <div className='innerContainer'>
-          <section className="sectionContainer">
-            <div className="outerRow">
-              <div className="columnLeft">
-                <h1>
-                  {t("welcomeTest")} <br />
-                  {t("welcome")}
-                </h1>
-                <p>
-                The CLI is a powerful tool for creating, modifying, and maintaining any software project, and is particularly useful for customizing our UI projects. We can use this CLI to enforce architectural rules and conventions, making our projects consistent and inter-operative.
-                </p>
-
-                <div className="innerRow">
-                  <div className="coulmn">
-                    <input
-                      onChange={updateNote}
-                      value={note}
-                      type="text"
-                      className="inputField"
-                      id="inputPassword2"
-                      placeholder="Type here..."
-                    />
-                  </div>
-                  
-                  <div className="coulmn">
-                    <button onClick={() => onAddNoteClick()}>
-                      GENERATE
-                    </button>
-                  </div>
-                  
-                </div>
-                <div className='paddingLeft'>
-                    <ol>
-                      {notes.map((note) => {
-                        return <li key={note} className='data-list'>{note}</li>;
-                      })}
-                    </ol>
-                  </div>
-              
-              </div>
-                <div className='loginImgContainer '>
-                  <div className="floatEnd" ><img src="assets/images/illustration 1.png" alt="" /></div>
-                </div>
- 
-            </div>
-          </section>
-        </div>
-      </div>
+      <DashboardComponent />
     </div>
   );
 }
