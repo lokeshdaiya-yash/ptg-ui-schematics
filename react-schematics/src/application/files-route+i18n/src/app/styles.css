@@ -1,5 +1,6 @@
 :root {
-  --btn-active:#f6190d;
+  --btn-active: #f6190d;
+  --white: #fff;
 }
 
 * {
@@ -85,7 +86,7 @@
   float: right !important;
 }
 .loginContainer p {
-  color: #fff;
+  color: var(--white);
   font-size: 16px;
   --bs-text-opacity: 1;
   padding-top: 1.5rem !important;
@@ -93,7 +94,7 @@
 }
 .loginContainer h1 {
   --bs-text-opacity: 1;
-  color: #fff;
+  color: var(--white);
   font-size: 2.5rem;
   font-weight: 700;
   line-height: 1.25 !important;
@@ -103,12 +104,12 @@
   font-size: 14px;
 }
 .loginContainer button {
-  background-color: --btn-active;
-  border: 1px solid --btn-active;
+  background-color: var(--btn-active);
+  border: 1px solid var(--btn-active);
   font-weight: 500;
   cursor: pointer;
   border-radius: 50px;
-  color: #fff !important;
+  color: var(--white) !important;
   padding-top: 0.7rem !important;
   padding-bottom: 0.7rem !important;
   padding-right: 1rem !important;
@@ -116,13 +117,13 @@
   margin-bottom: 0.5rem !important;
 }
 .btn:hover {
-  background-color: --btn-active;
+  background-color: var(--btn-active);
 }
 .floatEnd {
   float: right !important;
 }
 .data-list {
-  color: #fff;
+  color: var(--white);
 }
 .paddingLeft {
   padding: 20px;
@@ -148,7 +149,7 @@
 }
 .navbar {
   --bs-bg-opacity: 1;
-  background-color: #fff;
+  background-color: var(--white);
   padding-top: 0.25rem !important;
   padding-bottom: 0.25rem !important;
   --bs-navbar-padding-x: 0;
@@ -213,14 +214,14 @@
   left: 16px;
 }
 .loginBtn {
-  background-color: --btn-active;
-  border: 1px solid --btn-active;
+  background-color: var(--btn-active);
+  border: 1px solid var(--btn-active);
   font-weight: 500;
   font-size: 14px;
   border-radius: 50px !important;
   cursor: pointer;
   --bs-text-opacity: 1;
-  color: #fff !important;
+  color: var(--white) !important;
   padding-right: 1rem !important;
   padding-left: 1rem !important;
   margin-right: 0 !important;
@@ -229,8 +230,8 @@
   padding-bottom: 0.5rem !important;
 }
 .loginBtn:active {
-  background: --btn-active !important;
-  border: 1px solid --btn-active;
+  background: var(--btn-active) !important;
+  border: 1px solid var(--btn-active);
 }
 
 @media (min-width: 576px) {

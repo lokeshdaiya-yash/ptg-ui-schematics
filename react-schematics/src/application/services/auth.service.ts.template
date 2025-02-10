@@ -1,9 +1,4 @@
-/**
- * @since January 2025
- * @author Nimish Jain
- * @desc Generic class for auth service
- */
-
+import { environment } from "../../environments/environment";
 class AuthService {
   private readonly TOKEN_KEY = "userdata";
 
@@ -24,7 +19,7 @@ class AuthService {
   async login(payload: any) {
     try {
       const response = await fetch(
-        "https://yash-ui-strapi.azurewebsites.net/api/auth/local", // Replace this with your own URL
+        environment.baseApiUrl,
         {
           method: "POST",
           mode: "cors",

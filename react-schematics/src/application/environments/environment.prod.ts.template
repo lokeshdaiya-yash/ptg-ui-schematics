@@ -1,12 +1,11 @@
 export const environment = {
   production: true,
+  baseApiUrl: '',
   clientId: "",
   <%  if(auth === 'okta') { %>
   redirectURL:  'http://localhost:4200/login/callback' ,
-   <% } else { %>  
-   redirectURL :'', 
-   <% } %>
-  <% if(auth === 'okta') { %>
-  yourOktaDomain: "",
+  <% } else { %>
+  redirectURL :'',
   <% } %>
+  <% if(auth === 'okta') { %>yourOktaDomain: "",<% } %>
 };
