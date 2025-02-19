@@ -28,33 +28,32 @@ import {
   bootstrapVersion,
   reactBootstrapVersion,
 } from "../utils/version";
+import { ApplicationSchema, AUTH_PROVIDER, CSS_FRAMEWORK } from "./schema";
 
-// Instead of `any`, it would make sense here to get a schema-to-dts package and output the
-// interfaces so you get type-safe options.
-export default function (options: any): Rule {
+export default function (_options: ApplicationSchema): Rule {
   return async (host: Tree, _context: SchematicContext) => {
     const workspace = await getWorkspace(host);
     const newProjectRoot =
       (workspace.extensions.newProjectRoot as string | undefined) ?? "";
-    const isRootApp = options.projectRoot !== undefined;
+    const isRootApp = _options.projectRoot !== undefined;
     const appDir = isRootApp
-      ? normalize(options.projectRoot || "")
-      : join(normalize(newProjectRoot), strings.dasherize(options.name));
-    options.appDir = appDir;
-    let originalOptionsObject = JSON.parse(JSON.stringify(options));
-    // The chain rule allows us to chain multiple rules and apply them one after the other.
+      ? normalize(_options.projectRoot || "")
+      : join(normalize(newProjectRoot), strings.dasherize(_options.name));
+    _options.appDir = appDir;
+    let originalOptionsObject = JSON.parse(JSON.stringify(_options));
 
     return chain([
       (_tree: Tree, context: SchematicContext) => {
-        // Show the options for this Schematics.
-        context.logger.info("Application->: " + JSON.stringify(options));
+        context.logger.info(
+          "Application Configuration : " + JSON.stringify(_options)
+        );
       },
 
       // The schematic Rule calls the schematic from the same collection, with the options
       // passed in. Please note that if the schematic has a schema, the options will be
       // validated and could throw, e.g. if a required option is missing.
       externalSchematic("@nrwl/react", "application", {
-        ...options,
+        ..._options,
       }),
       //schematic('my-other-schematic', { option: true }),
       setFramework(originalOptionsObject, isRootApp),
@@ -103,7 +102,7 @@ export default function (options: any): Rule {
                 appName: originalOptionsObject.name,
                 isRootApp,
               }),
-              move(`apps/${options.name}`),
+              move(`apps/${_options.name}`),
             ]),
             MergeStrategy.Overwrite
           )
@@ -119,7 +118,7 @@ export default function (options: any): Rule {
                 appName: originalOptionsObject.name,
                 isRootApp,
               }),
-              move(`apps/${options.name}`),
+              move(`apps/${_options.name}`),
             ]),
             MergeStrategy.Overwrite
           )
@@ -135,7 +134,7 @@ export default function (options: any): Rule {
                 appName: originalOptionsObject.name,
                 isRootApp,
               }),
-              move(`apps/${options.name}`),
+              move(`apps/${_options.name}`),
             ]),
             MergeStrategy.Overwrite
           )
@@ -151,7 +150,7 @@ export default function (options: any): Rule {
                 appName: originalOptionsObject.name,
                 isRootApp,
               }),
-              move(`apps/${options.name}`),
+              move(`apps/${_options.name}`),
             ]),
             MergeStrategy.Overwrite
           )
@@ -167,7 +166,7 @@ export default function (options: any): Rule {
                 appName: originalOptionsObject.name,
                 isRootApp,
               }),
-              move(`apps/${options.name}`),
+              move(`apps/${_options.name}`),
             ]),
             MergeStrategy.Overwrite
           )
@@ -183,7 +182,7 @@ export default function (options: any): Rule {
                 appName: originalOptionsObject.name,
                 isRootApp,
               }),
-              move(`apps/${options.name}`),
+              move(`apps/${_options.name}`),
             ]),
             MergeStrategy.Overwrite
           )
@@ -199,7 +198,7 @@ export default function (options: any): Rule {
                 appName: originalOptionsObject.name,
                 isRootApp,
               }),
-              move(`apps/${options.name}`),
+              move(`apps/${_options.name}`),
             ]),
             MergeStrategy.Overwrite
           )
@@ -215,16 +214,16 @@ export default function (options: any): Rule {
                 appName: originalOptionsObject.name,
                 isRootApp,
               }),
-              move(`apps/${options.name}`),
+              move(`apps/${_options.name}`),
             ]),
             MergeStrategy.Overwrite
           )
         : noop,
-      originalOptionsObject.auth === "okta"
+      originalOptionsObject.auth === AUTH_PROVIDER.OKTA
         ? mergeWith(
             apply(url("./okta/"), [
               applyTemplates({}),
-              move(`apps/${options.name}/src/app/okta/`),
+              move(`apps/${_options.name}/src/app/okta/`),
             ]),
             MergeStrategy.Overwrite
           )
@@ -232,49 +231,64 @@ export default function (options: any): Rule {
       mergeWith(
         apply(url("./environments/"), [
           applyTemplates({ ...originalOptionsObject }),
-          move(`apps/${options.name}/src/environments/`),
+          move(`apps/${_options.name}/src/environments/`),
         ]),
         MergeStrategy.Overwrite
       ),
     ]);
   };
 }
-export function setFramework(options: any, isRootApp: boolean) {
+
+/**
+ * Set CSS framework
+ * @param _options:ApplicationSchema
+ * @param isRootApp
+ * @returns Rule
+ */
+export function setFramework(
+  _options: ApplicationSchema,
+  isRootApp: boolean
+): Rule {
   const tasks = [];
-  if (options.framework === "material") {
+  if (_options.framework === CSS_FRAMEWORK.MATERIAL) {
     tasks.push(addMaterialToPackageJson());
   }
-  if (options.auth === "custom") {
+  if (_options.auth === "custom") {
     tasks.push(
       addLoginToProject(
-        options,
+        _options,
         isRootApp,
         "./login/",
-        `apps/${options.name}/src/app/login/`
+        `apps/${_options.name}/src/app/login/`
       )
     );
-    tasks.push(addAuthServiceToProject(options, isRootApp));
+    tasks.push(addAuthServiceToProject(_options, isRootApp));
   }
-  if (options.auth === "msal") {
+  if (_options.auth === AUTH_PROVIDER.MASL) {
     tasks.push(
       addLoginToProject(
-        options,
+        _options,
         isRootApp,
         "./msal/",
-        `apps/${options.name}/src/app/config/`
+        `apps/${_options.name}/src/app/config/`
       )
     );
-    tasks.push(addLoginToProject(options, isRootApp, "./documentation/", `/`));
+    tasks.push(addLoginToProject(_options, isRootApp, "./documentation/", `/`));
   }
-  if (options.framework === "bootstrap") {
+  if (_options.framework === CSS_FRAMEWORK.BOOTSTRAP) {
     tasks.push(addBootstrapToPackageJson());
-    tasks.push(updateStyles(options));
+    tasks.push(updateStyles(_options));
   }
   if (tasks.length > 0) return chain(tasks);
   else return noop;
 }
 
-export function setReduxTpPackageJson(options: any): Rule {
+/**
+ * Add redux to package.json
+ * @param options:ApplicationSchema
+ * @returns Rule
+ */
+export function setReduxTpPackageJson(options: ApplicationSchema): Rule {
   if (!options.redux) {
     return noop;
   }
@@ -290,7 +304,12 @@ export function setReduxTpPackageJson(options: any): Rule {
   ]);
 }
 
-export function setI18nToPackageJson(options: any): Rule {
+/**
+ * Add i18n to package.json
+ * @param options:ApplicationSchema
+ * @returns Rule
+ */
+export function setI18nToPackageJson(options: ApplicationSchema): Rule {
   if (!options.i18n) {
     return noop;
   }
@@ -308,7 +327,16 @@ export function setI18nToPackageJson(options: any): Rule {
   ]);
 }
 
-export function addDashboardToProject(_options: any, isRootApp: boolean): Rule {
+/**
+ * Add i18n to project
+ * @param _options:ApplicationSchema
+ * @param isRootApp
+ * @returns Rule
+ */
+export function addDashboardToProject(
+  _options: ApplicationSchema,
+  isRootApp: boolean
+): Rule {
   const inputUrl = "./redux-i18-dashboard/";
   return mergeWith(
     apply(url(inputUrl), [
@@ -324,8 +352,16 @@ export function addDashboardToProject(_options: any, isRootApp: boolean): Rule {
   );
 }
 
+/**
+ * Add login to project
+ * @param _options:ApplicationSchema
+ * @param isRootApp
+ * @param inputUrl
+ * @param outputPath
+ * @returns Rule
+ */
 export function addLoginToProject(
-  _options: any,
+  _options: ApplicationSchema,
   isRootApp: boolean,
   inputUrl: string,
   outputPath: string
@@ -343,8 +379,15 @@ export function addLoginToProject(
     MergeStrategy.Overwrite
   );
 }
+
+/**
+ * Add auth service to project
+ * @param _options:ApplicationSchema
+ * @param isRootApp
+ * @returns Rule
+ */
 export function addAuthServiceToProject(
-  _options: any,
+  _options: ApplicationSchema,
   isRootApp: boolean
 ): Rule {
   let inputUrl = "./services/";
@@ -362,6 +405,10 @@ export function addAuthServiceToProject(
   );
 }
 
+/**
+ * Add material to package.json
+ * @returns Rule
+ */
 export function addMaterialToPackageJson(): Rule {
   return addDepsToPackageJson(
     {
@@ -375,6 +422,10 @@ export function addMaterialToPackageJson(): Rule {
   );
 }
 
+/**
+ * Add bootstrap to package.json
+ * @returns Rule
+ */
 export function addBootstrapToPackageJson(): Rule {
   return addDepsToPackageJson(
     {
@@ -386,10 +437,15 @@ export function addBootstrapToPackageJson(): Rule {
   );
 }
 
-export function updateStyles(options: any) {
+/**
+ * Add bootstrap to styles
+ * @param options:ApplicationSchema
+ * @returns Rule
+ */
+export function updateStyles(options: ApplicationSchema) {
   return (host: Tree) => {
     let content = ``;
-    if (options.framework === "bootstrap") {
+    if (options.framework === CSS_FRAMEWORK.BOOTSTRAP) {
       content = `@import "~bootstrap/dist/css/bootstrap.css";`;
     }
     host.overwrite(`apps/${options.name}/src/styles.${options.style}`, content);
