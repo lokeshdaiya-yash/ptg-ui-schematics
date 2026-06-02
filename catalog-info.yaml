@@ -1,0 +1,18 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ptg-ui-schematics
+  description: PTG UI Schematics monorepo — Angular schematics, React schematics, and CLI for scaffolding PTG UI applications
+  annotations:
+    github.com/project-slug: lokeshdaiya-yash/ptg-ui-schematics
+    backstage.io/source-location: url:https://github.com/lokeshdaiya-yash/ptg-ui-schematics
+  tags:
+    - schematics
+    - angular
+    - react
+    - cli
+    - typescript
+spec:
+  type: library
+  owner: user:default/lokeshdaiya-yash
+  lifecycle: experimental
